@@ -60,9 +60,32 @@ public class Graph<T> implements GraphADT<T> {
         numVertices++;
     }
 
+    /**
+     * Removes a single vertex from the graph along with all its
+     * associated edges. The removal is performed by replacing the
+     * vertex and its connections in the adjacency matrix and vertex array,
+     * maintaining the structure of the graph.
+     *
+     * @param vertex the vertex to be removed from the graph
+     */
     @Override
     public void removeVertex(T vertex) {
+        int index = getIndex(vertex);
 
+        if (indexIsValid(index)) {
+            this.numVertices--;
+
+            this.vertices[index] = this.vertices[this.numVertices];
+            this.vertices[this.numVertices] = null;
+
+            for (int i = 0; i < this.numVertices; i++) {
+                this.adjMatrix[index][i] = this.adjMatrix[this.numVertices][i];
+            }
+
+            for (int i = 0; i < this.numVertices + 1; i++) {
+                this.adjMatrix[i][index] = this.adjMatrix[i][this.numVertices];
+            }
+        }
     }
 
     /**
@@ -71,7 +94,7 @@ public class Graph<T> implements GraphADT<T> {
      * @param index1 the first index
      * @param index2 the second index
      */
-    public void addEdge (int index1, int index2) {
+    public void addEdge(int index1, int index2) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
             adjMatrix[index1][index2] = true;
             adjMatrix[index2][index1] = true;
@@ -98,7 +121,7 @@ public class Graph<T> implements GraphADT<T> {
      */
     @Override
     public void addEdge(T vertex1, T vertex2) {
-        addEdge (getIndex(vertex1), getIndex(vertex2));
+        addEdge(getIndex(vertex1), getIndex(vertex2));
     }
 
     /**
@@ -125,7 +148,8 @@ public class Graph<T> implements GraphADT<T> {
         if (!indexIsValid(index1) || indexIsValid(index2)) {
             throw new ElementNotFoundException("Vertex not found in graph.");
         }
-
+        adjMatrix[index1][index2] = false;
+        adjMatrix[index2][index1] = false;
     }
 
     /**
@@ -149,16 +173,13 @@ public class Graph<T> implements GraphADT<T> {
 
         traversalQueue.enqueue(startIndex);
         visited[startIndex] = true;
-        while (!traversalQueue.isEmpty())
-        {
+        while (!traversalQueue.isEmpty()) {
             x = traversalQueue.dequeue();
             resultList.addToRear(vertices[x.intValue()]);
             /** Find all vertices adjacent to x that have
              not been visited and queue them up */
-            for (int i = 0; i < numVertices; i++)
-            {
-                if (adjMatrix[x.intValue()][i] && !visited[i])
-                {
+            for (int i = 0; i < numVertices; i++) {
+                if (adjMatrix[x.intValue()][i] && !visited[i]) {
                     traversalQueue.enqueue(i);
                     visited[i] = true;
                 }
@@ -174,6 +195,7 @@ public class Graph<T> implements GraphADT<T> {
 
     @Override
     public Iterator iteratorShortestPath(T startVertex, T targetVertex) {
+        //Dikstra with priority queue
         return null;
     }
 

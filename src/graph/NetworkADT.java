@@ -8,7 +8,7 @@ public interface NetworkADT<T> extends GraphADT<T> {
      * @param vertex2 the second vertex
      * @param weight the weight
      */
-     void addEdge (T vertex1, T vertex2, double weight);
+     void addEdge (T vertex1, T vertex2, double weight);//tipo evento
 
     /**
      * Returns the weight of the shortest path in this network.
