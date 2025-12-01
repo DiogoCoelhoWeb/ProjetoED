@@ -1,6 +1,7 @@
 package events;
 
 import lists.ArrayUnorderedList;
+import player.Player;
 
 public abstract class ChoiceEvent extends Event{
 
@@ -13,6 +14,7 @@ public abstract class ChoiceEvent extends Event{
      */
     public ChoiceEvent(String description) {
         super(description);
+        this.choices = new ArrayUnorderedList<>(); // Initialize the choices list
     }
 
     /**
@@ -25,7 +27,7 @@ public abstract class ChoiceEvent extends Event{
      * @throws IllegalArgumentException if the choice is null or empty
      */
     public void addChoice(String choice){
-        if(choice == null || choice == " "){
+        if(choice == null || choice.trim().isEmpty()){
             throw new IllegalArgumentException("Choice cannot be null or empty.");
         }
         this.choices.addToRear(choice);
@@ -40,7 +42,12 @@ public abstract class ChoiceEvent extends Event{
         return this.choices;
     }
 
-
-    //public abstract EventResult execute(Player player);
-
+    /**
+     * Executes the event, applying its effects to the specified player.
+     * This method must be implemented by subclasses to define their specific event logic.
+     *
+     * @param player the player affected by the event
+     * @return a String message describing the outcome of the event
+     */
+    public abstract String execute(Player player);
 }

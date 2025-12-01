@@ -4,6 +4,8 @@ import events.BuffDebuffEvent;
 
 public class Corridor extends MapLocations {
 
+
+
     /**
      * Constructs a Corridor instance with the specified name and associated BuffDebuffEvent.
      * This constructor initializes the name and event properties for the Corridor object.

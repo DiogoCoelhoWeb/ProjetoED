@@ -24,6 +24,11 @@ public abstract class  MapLocations {
         this.id = idCounter++;
     }
 
+
+    public Event getEvent() {
+        return this.event;
+    }
+
     /**
      * Constructs a MapLocations instance with the specified name.
      *

@@ -1,6 +1,6 @@
 package player;
 
-import rooms.Room;
+import rooms.MapLocations;
 import stack.LinkedStack;
 
 public class Player {
@@ -11,8 +11,8 @@ public class Player {
     private final String username;
     private int turns;
 
-    private Room currentRoom;
-    private final LinkedStack<Room> pathHistory;
+    private MapLocations currentLocation;
+    private final LinkedStack<MapLocations> pathHistory;
     private int blockedTurns;
 
 
@@ -22,17 +22,17 @@ public class Player {
      * blocked turns (set to zero), the starting room as the current room, and their path history.
      *
      * @param username the username of the player
-     * @param startingRoom the initial Room where the player starts
+     * @param startingLocation the initial Room where the player starts
      */
-    public Player(String username, Room startingRoom) {
+    public Player(String username, MapLocations startingLocation) {
         this.id = idCounter++;
         this.username = username;
         this.turns = 1;
         this.blockedTurns = 0;
 
-        this.currentRoom = startingRoom;
+        this.currentLocation = startingLocation;
         this.pathHistory = new LinkedStack<>();
-        this.pathHistory.push(startingRoom);
+        this.pathHistory.push(startingLocation);
     }
 
     /**
@@ -98,8 +98,8 @@ public class Player {
      *
      * @return the current room of the player
      */
-    public Room getCurrentRoom() {
-        return currentRoom;
+    public MapLocations getCurrentLocation() {
+        return currentLocation;
     }
 
 
@@ -108,12 +108,12 @@ public class Player {
      * current room, adds the new room to the player's path history, and notifies
      * the player of the room change through a message.
      *
-     * @param newRoom the new room the player is moving to
+     * @param newLocation the new room the player is moving to
      */
-    public void moveTo(Room newRoom) {
-        this.currentRoom = newRoom;
-        this.pathHistory.push(this.currentRoom);
-        System.out.println(this.username + " moved to " + newRoom.getName());
+    public void moveTo(MapLocations newLocation) {
+        this.currentLocation = newLocation;
+        this.pathHistory.push(this.currentLocation);
+        System.out.println(this.username + " moved to " + newLocation.getName());
     }
 
 
@@ -124,15 +124,15 @@ public class Player {
      *
      * @return the current room of the player after attempting to go back
      */
-    public Room goBack() {
+    public MapLocations goBack() {
         if (pathHistory.size() > 1) {
             pathHistory.pop();
-            this.currentRoom = pathHistory.peek();
-            System.out.println(username + "retrived to " + this.currentRoom.getName());
+            this.currentLocation = pathHistory.peek();
+            System.out.println(username + "retrived to " + this.currentLocation.getName());
         } else {
             System.out.println(username + " cant go back");
         }
-        return this.currentRoom;
+        return this.currentLocation;
     }
 
 

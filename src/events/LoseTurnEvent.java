@@ -1,5 +1,8 @@
 package events;
 
+import player.Player;
+import utils.Quotes;
+
 public class LoseTurnEvent extends BuffDebuffEvent{
 
     private int numTurns ;
@@ -13,7 +16,7 @@ public class LoseTurnEvent extends BuffDebuffEvent{
      * this information to the event's description.
      */
     public LoseTurnEvent() {
-        super("You recived a strategic pause for a few turns.");
+        super(Quotes.getRandomLoseTurnQuote());
         randomizeTurns();
         setDescription(this.description + " You will lose " + this.numTurns + " turns.");
     }
@@ -27,4 +30,9 @@ public class LoseTurnEvent extends BuffDebuffEvent{
        this.numTurns= (int) (Math.random() * 4) + 1;
     }
 
+    @Override
+    public String execute(Player player) {
+        player.block(this.numTurns);
+        return player.getUsername() + " : " + description;
+    }
 }

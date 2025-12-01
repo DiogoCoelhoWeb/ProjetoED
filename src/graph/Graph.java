@@ -1,8 +1,12 @@
 package graph;
 
+import events.BuffDebuffEvent;
 import exeptions.ElementNotFoundException;
 import lists.ArrayUnorderedList;
 import queue.LinkedQueue;
+import stack.LinkedStack;
+import rooms.Corridor;
+import rooms.MapLocations;
 
 import java.util.Iterator;
 
@@ -89,12 +93,59 @@ public class Graph<T> implements GraphADT<T> {
     }
 
     /**
-     * Inserts an edge between two vertices of the graph.
+     * Inserts an edge between two vertices of this graph.
+     * This implementation is specific to the Labyrinth game and assumes T is MapLocations.
+     * It creates a Corridor vertex between the two specified locations.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     */
+    @Override
+    public void addEdge(T vertex1, T vertex2) {
+        // This is now a "no-event" corridor
+        addEdge(vertex1, vertex2, null);
+    }
+
+    /**
+     * Inserts an edge between two vertices of this graph with a specific event.
+     * This implementation is specific to the Labyrinth game and assumes T is MapLocations.
+     * It creates a Corridor vertex with the given event and connects it between the two locations.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     * @param event   the event to associate with the corridor
+     */
+
+    public void addEdge(T vertex1, T vertex2, BuffDebuffEvent event) {
+        if (!(vertex1 instanceof MapLocations) || !(vertex2 instanceof MapLocations)) {
+            throw new IllegalArgumentException("This addEdge implementation is only for MapLocations.");
+        }
+
+        MapLocations loc1 = (MapLocations) vertex1;
+        MapLocations loc2 = (MapLocations) vertex2;
+
+        Corridor corridor = new Corridor("Corridor from " + loc1.getName() + " to " + loc2.getName(), event);
+        
+        // Add the corridor as a new vertex
+        addVertex((T) corridor);
+
+        // Connect loc1 to corridor and corridor to loc2
+        int index1 = getIndex(vertex1);
+        int index2 = getIndex(vertex2);
+        int corridorIndex = getIndex((T) corridor);
+
+        // Internal method to create direct edge
+        addEdgeByIndex(index1, corridorIndex);
+        addEdgeByIndex(corridorIndex, index2);
+    }
+    
+    /**
+     * Internal method to insert an edge between two vertices of the graph by their indices.
      *
      * @param index1 the first index
      * @param index2 the second index
      */
-    public void addEdge(int index1, int index2) {
+    private void addEdgeByIndex(int index1, int index2) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
             adjMatrix[index1][index2] = true;
             adjMatrix[index2][index1] = true;
@@ -112,19 +163,6 @@ public class Graph<T> implements GraphADT<T> {
     }
 
     /**
-     * Inserts an edge between two vertices of the graph by their objects.
-     * The method retrieves the indices of the vertices in the graph
-     * and uses these indices to add the edge in the adjacency representation.
-     *
-     * @param vertex1 the first vertex to connect
-     * @param vertex2 the second vertex to connect
-     */
-    @Override
-    public void addEdge(T vertex1, T vertex2) {
-        addEdge(getIndex(vertex1), getIndex(vertex2));
-    }
-
-    /**
      * Retrieves the index of the specified vertex in the graph.
      * The method iterates through the vertices array to find
      * the matching vertex and returns its index. If the vertex
@@ -135,7 +173,7 @@ public class Graph<T> implements GraphADT<T> {
      */
     private int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++) {
-            if (vertices[i].equals(vertex)) return i;
+            if (vertices[i] != null && vertices[i].equals(vertex)) return i;
         }
         return -1;
     }
@@ -145,7 +183,7 @@ public class Graph<T> implements GraphADT<T> {
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
 
-        if (!indexIsValid(index1) || indexIsValid(index2)) {
+        if (!indexIsValid(index1) || !indexIsValid(index2)) {
             throw new ElementNotFoundException("Vertex not found in graph.");
         }
         adjMatrix[index1][index2] = false;
@@ -175,11 +213,11 @@ public class Graph<T> implements GraphADT<T> {
         visited[startIndex] = true;
         while (!traversalQueue.isEmpty()) {
             x = traversalQueue.dequeue();
-            resultList.addToRear(vertices[x.intValue()]);
+            resultList.addToRear(vertices[x]);
             /** Find all vertices adjacent to x that have
              not been visited and queue them up */
             for (int i = 0; i < numVertices; i++) {
-                if (adjMatrix[x.intValue()][i] && !visited[i]) {
+                if (adjMatrix[x][i] && !visited[i]) {
                     traversalQueue.enqueue(i);
                     visited[i] = true;
                 }
@@ -189,14 +227,93 @@ public class Graph<T> implements GraphADT<T> {
     }
 
     @Override
-    public Iterator iteratorDFS(T startVertex) {
-        return null;
+    public Iterator<T> iteratorDFS(T startVertex) {
+        int startIndex = getIndex(startVertex);
+        Integer x;
+        boolean found;
+        LinkedStack<Integer> traversalStack = new LinkedStack<>();
+        ArrayUnorderedList<T> resultList = new ArrayUnorderedList<>();
+        boolean[] visited = new boolean[numVertices];
+
+        if (!indexIsValid(startIndex)) {
+            return resultList.iterator();
+        }
+
+        for (int i = 0; i < numVertices; i++) {
+            visited[i] = false;
+        }
+
+        traversalStack.push(startIndex);
+        resultList.addToRear(vertices[startIndex]);
+        visited[startIndex] = true;
+
+        while (!traversalStack.isEmpty()) {
+            x = traversalStack.peek();
+            found = false;
+            /** Find a vertex adjacent to x that has not been visited
+             and push it on the stack */
+            for (int i = 0; (i < numVertices) && !found; i++) {
+                if (adjMatrix[x][i] && !visited[i]) {
+                    traversalStack.push(i);
+                    resultList.addToRear(vertices[i]);
+                    visited[i] = true;
+                    found = true;
+                }
+            }
+            if (!found && !traversalStack.isEmpty()) {
+                traversalStack.pop();
+            }
+        }
+        return resultList.iterator();
     }
 
     @Override
-    public Iterator iteratorShortestPath(T startVertex, T targetVertex) {
-        //Dikstra with priority queue
-        return null;
+    public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
+        int startIndex = getIndex(startVertex);
+        int targetIndex = getIndex(targetVertex);
+        LinkedQueue<Integer> traversalQueue = new LinkedQueue<>();
+        ArrayUnorderedList<T> resultList = new ArrayUnorderedList<>();
+        if (!indexIsValid(startIndex) || !indexIsValid(targetIndex)) {
+            return resultList.iterator();
+        }
+
+        boolean[] visited = new boolean[numVertices];
+        int[] predecessor = new int[numVertices];
+        for (int i = 0; i < numVertices; i++) {
+            visited[i] = false;
+            predecessor[i] = -1;
+        }
+
+        traversalQueue.enqueue(startIndex);
+        visited[startIndex] = true;
+
+        while (!traversalQueue.isEmpty()) {
+            int x = traversalQueue.dequeue();
+
+            if (x == targetIndex) { // Found the target
+                // Reconstruct path
+                int current = targetIndex;
+                LinkedStack<T> pathStack = new LinkedStack<>();
+                while (current != -1) {
+                    pathStack.push(vertices[current]);
+                    current = predecessor[current];
+                }
+                while(!pathStack.isEmpty()){
+                    resultList.addToRear(pathStack.pop());
+                }
+                return resultList.iterator();
+            }
+
+            for (int i = 0; i < numVertices; i++) {
+                if (adjMatrix[x][i] && !visited[i]) {
+                    visited[i] = true;
+                    predecessor[i] = x;
+                    traversalQueue.enqueue(i);
+                }
+            }
+        }
+
+        return resultList.iterator(); // Path not found
     }
 
     @Override
@@ -206,7 +323,19 @@ public class Graph<T> implements GraphADT<T> {
 
     @Override
     public boolean isConnected() {
-        return false;
+        if (isEmpty()) {
+            return false;
+        }
+
+        Iterator<T> it = iteratorBFS(this.vertices[0]);
+        int counter = 0;
+
+        while (it.hasNext()) {
+            it.next();
+            counter++;
+        }
+
+        return (counter == this.numVertices);
     }
 
     @Override
