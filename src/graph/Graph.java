@@ -1,12 +1,9 @@
 package graph;
 
-import events.BuffDebuffEvent;
 import exeptions.ElementNotFoundException;
 import lists.ArrayUnorderedList;
 import queue.LinkedQueue;
 import stack.LinkedStack;
-import rooms.Corridor;
-import rooms.MapLocations;
 
 import java.util.Iterator;
 
@@ -23,18 +20,19 @@ public class Graph<T> implements GraphADT<T> {
      * Copies existing vertex data to the new vertices array and replicates the current adjacency
      * matrix values into the expanded matrix.
      */
-    private void expandCapacity() {
+    protected void expandCapacity() {
         int newCapacity = vertices.length * 2;
         T[] newVertices = (T[]) (new Object[newCapacity]);
         System.arraycopy(vertices, 0, newVertices, 0, vertices.length);
         vertices = newVertices;
 
-        adjMatrix = new boolean[newCapacity][newCapacity];
+        boolean[][] newAdjMatrix = new boolean[newCapacity][newCapacity];
         for (int i = 0; i < numVertices; i++) {
             for (int j = 0; j < numVertices; j++) {
-                adjMatrix[i][j] = adjMatrix[j][i];
+                newAdjMatrix[i][j] = adjMatrix[i][j];
             }
         }
+        adjMatrix = newAdjMatrix;
     }
 
     /**
@@ -94,51 +92,21 @@ public class Graph<T> implements GraphADT<T> {
 
     /**
      * Inserts an edge between two vertices of this graph.
-     * This implementation is specific to the Labyrinth game and assumes T is MapLocations.
-     * It creates a Corridor vertex between the two specified locations.
      *
      * @param vertex1 the first vertex
      * @param vertex2 the second vertex
      */
     @Override
     public void addEdge(T vertex1, T vertex2) {
-        // This is now a "no-event" corridor
-        addEdge(vertex1, vertex2, null);
-    }
-
-    /**
-     * Inserts an edge between two vertices of this graph with a specific event.
-     * This implementation is specific to the Labyrinth game and assumes T is MapLocations.
-     * It creates a Corridor vertex with the given event and connects it between the two locations.
-     *
-     * @param vertex1 the first vertex
-     * @param vertex2 the second vertex
-     * @param event   the event to associate with the corridor
-     */
-
-    public void addEdge(T vertex1, T vertex2, BuffDebuffEvent event) {
-        if (!(vertex1 instanceof MapLocations) || !(vertex2 instanceof MapLocations)) {
-            throw new IllegalArgumentException("This addEdge implementation is only for MapLocations.");
-        }
-
-        MapLocations loc1 = (MapLocations) vertex1;
-        MapLocations loc2 = (MapLocations) vertex2;
-
-        Corridor corridor = new Corridor("Corridor from " + loc1.getName() + " to " + loc2.getName(), event);
-        
-        // Add the corridor as a new vertex
-        addVertex((T) corridor);
-
-        // Connect loc1 to corridor and corridor to loc2
         int index1 = getIndex(vertex1);
         int index2 = getIndex(vertex2);
-        int corridorIndex = getIndex((T) corridor);
 
-        // Internal method to create direct edge
-        addEdgeByIndex(index1, corridorIndex);
-        addEdgeByIndex(corridorIndex, index2);
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+            adjMatrix[index1][index2] = true;
+            adjMatrix[index2][index1] = true;
+        }
     }
-    
+
     /**
      * Internal method to insert an edge between two vertices of the graph by their indices.
      *
@@ -158,7 +126,7 @@ public class Graph<T> implements GraphADT<T> {
      * @param index the index to check for validity
      * @return true if the index is between 0 (inclusive) and the number of vertices (exclusive), false otherwise
      */
-    private boolean indexIsValid(int index) {
+    protected boolean indexIsValid(int index) {
         return index >= 0 && index < numVertices;
     }
 
@@ -171,13 +139,22 @@ public class Graph<T> implements GraphADT<T> {
      * @param vertex the vertex whose index is to be retrieved
      * @return the index of the specified vertex if found; -1 otherwise
      */
-    private int getIndex(T vertex) {
+    protected int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++) {
             if (vertices[i] != null && vertices[i].equals(vertex)) return i;
         }
         return -1;
     }
 
+    /**
+     * Removes an edge between two vertices in the graph. If either vertex is not present
+     * in the graph, an ElementNotFoundException is thrown. The adjacency matrix is updated
+     * to reflect the removal of the edge in both directions.
+     *
+     * @param vertex1 the first vertex from which the edge originates
+     * @param vertex2 the second vertex to which the edge is connected
+     * @throws ElementNotFoundException if either of the vertices is not found in the graph
+     */
     @Override
     public void removeEdge(T vertex1, T vertex2) {
         int index1 = getIndex(vertex1);
@@ -226,6 +203,15 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
+    /**
+     * Returns an iterator that performs a depth-first search (DFS) traversal of the graph,
+     * starting from the specified vertex. The traversal explores as far as possible along
+     * each branch before backtracking.
+     *
+     * @param startVertex the vertex to begin the depth-first search from
+     * @return an iterator that performs a depth-first traversal of the graph starting from
+     *         the specified vertex; returns an empty iterator if the vertex is invalid
+     */
     @Override
     public Iterator<T> iteratorDFS(T startVertex) {
         int startIndex = getIndex(startVertex);
@@ -267,6 +253,16 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
+    /**
+     * Returns an iterator that performs a traversal to find the shortest path
+     * from the specified starting vertex to the target vertex in the graph.
+     * If no path exists or the vertices are invalid, an empty iterator is returned.
+     *
+     * @param startVertex the starting vertex of the path
+     * @param targetVertex the target vertex of the path
+     * @return an iterator over the shortest path from startVertex to targetVertex,
+     *         or an empty iterator if no path exists or the vertices are invalid
+     */
     @Override
     public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         int startIndex = getIndex(startVertex);
@@ -316,11 +312,38 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator(); // Path not found
     }
 
+
+    /**
+     * Determines if there is an edge between the start vertex and the target vertex
+     * in the graph by checking the adjacency matrix.
+     *
+     * @param startVertex the starting vertex
+     * @param targetVertex the target vertex
+     * @return true if there is an edge between the provided vertices, false otherwise
+     */
+    public boolean veifyToVertex(T startVertex, T targetVertex){
+        return this.adjMatrix[getIndex(startVertex)][getIndex(targetVertex)];
+    }
+
+    /**
+     * Determines if the graph is empty. A graph is considered empty if it has no vertices.
+     *
+     * @return true if there are no vertices in the graph; false otherwise
+     */
     @Override
     public boolean isEmpty() {
         return this.numVertices == 0;
     }
 
+    /**
+     * Determines if the graph is connected. A graph is considered connected if
+     * all vertices are reachable from any starting vertex. This method performs
+     * a breadth-first search (BFS) traversal to count the number of vertices
+     * that can be reached from the first vertex and compares it with the total
+     * number of vertices in the graph.
+     *
+     * @return true if all vertices are connected; false otherwise
+     */
     @Override
     public boolean isConnected() {
         if (isEmpty()) {
@@ -338,6 +361,11 @@ public class Graph<T> implements GraphADT<T> {
         return (counter == this.numVertices);
     }
 
+    /**
+     * Returns the number of vertices currently present in the graph.
+     *
+     * @return the integer number of vertices in the graph
+     */
     @Override
     public int size() {
         return this.numVertices;

@@ -14,4 +14,7 @@ public class ImpossibleEnigma extends ChoiceEvent{
         // The game loop will naturally proceed to the next player or turn.
         return player.getUsername() + " encountered an impossible enigma! No correct choice could be made, so they remain in their current location. " + getDescription();
     }
+    public  String execute(Player player,int choice){
+        return execute(player);
+    }
 }

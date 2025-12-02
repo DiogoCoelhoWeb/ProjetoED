@@ -50,4 +50,5 @@ public abstract class ChoiceEvent extends Event{
      * @return a String message describing the outcome of the event
      */
     public abstract String execute(Player player);
+    public abstract String execute(Player player,int choice);
 }

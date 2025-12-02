@@ -1,5 +1,6 @@
 package player;
 
+import graph.Graph;
 import rooms.MapLocations;
 import stack.LinkedStack;
 
@@ -110,12 +111,16 @@ public class Player {
      *
      * @param newLocation the new room the player is moving to
      */
-    public void moveTo(MapLocations newLocation) {
-        this.currentLocation = newLocation;
-        this.pathHistory.push(this.currentLocation);
-        System.out.println(this.username + " moved to " + newLocation.getName());
+    public void moveTo(MapLocations newLocation, Graph<MapLocations> graph) {
+        if(graph.veifyToVertex(this.currentLocation, newLocation)){
+            this.currentLocation = newLocation;
+            this.pathHistory.push(this.currentLocation);
+            System.out.println(this.username + " moved to " + newLocation.getName());
+        }
+        else {
+            System.out.print( this.username + " cant move to " + newLocation.getName());
+        }
     }
-
 
     /**
      * Navigates the player back to the previous room in their movement history, if possible.
@@ -128,7 +133,7 @@ public class Player {
         if (pathHistory.size() > 1) {
             pathHistory.pop();
             this.currentLocation = pathHistory.peek();
-            System.out.println(username + "retrived to " + this.currentLocation.getName());
+            System.out.println(username + ": " +  this.currentLocation.getName());
         } else {
             System.out.println(username + " cant go back");
         }

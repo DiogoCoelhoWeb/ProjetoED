@@ -25,6 +25,12 @@ bin/
 
 ### VS Code ###
 .vscode/
+.idea
 
 ### Mac OS ###
 .DS_Store
+
+2025.ED.Aula12.pdf
+2025.ED.Aula12_Capitulo_Gafos.pdf
+ED-2025-EN-TP-1.pdf
+shortest_path_explanation.md

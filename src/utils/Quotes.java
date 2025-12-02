@@ -16,9 +16,9 @@ public class Quotes {
             "A sudden fatigue overtakes you, halting your progress.",
             "The spirits of the labyrinth demand tribute: a pause in your journey.",
             "Your path darkens, forcing a moment of unwelcome reflection.",
-            "A fleeting illusion, and your momentum is lost for a time."
+            "A fleeting illusion, and your momentum is lost for a time.",
+            "Your decision has so bad the game decides to give you a break"
     };
-
 
     /**
      * Returns a random quote for a "go back" event.

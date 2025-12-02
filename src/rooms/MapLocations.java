@@ -1,5 +1,6 @@
 package rooms;
 
+import events.ChoiceEvent;
 import events.Event;
 
 public abstract class  MapLocations {
@@ -7,7 +8,7 @@ public abstract class  MapLocations {
     private static int idCounter = 0;
 
     protected String name;
-    protected Event event;
+    protected ChoiceEvent event;
     protected int id;
 
     /**
@@ -18,14 +19,14 @@ public abstract class  MapLocations {
      * @param name the name of the map location
      * @param event the event associated with this map location
      */
-    public MapLocations(String name, Event event) {
+    public MapLocations(String name, ChoiceEvent event) {
         this.name = name;
         this.event = event;
         this.id = idCounter++;
     }
 
 
-    public Event getEvent() {
+    public ChoiceEvent getEvent() {
         return this.event;
     }
 

@@ -30,8 +30,7 @@ public class MainMenu extends AbstractMenu {
 
                 break;
             case CREATE_MAP:
-                System.out.println("Create map...");
-
+              //  new MapEditorMenu().run();
                 break;
             case EXIT:
                 System.out.println("Exiting game. Goodbye!");

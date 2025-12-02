@@ -27,10 +27,10 @@ public class EnigmaEvent extends ChoiceEvent{
 
     public String execute(Player player, int choice) {
         if (choice == this.correctChoice) {
-            return player.getUsername() + " solved the enigma! " + getDescription();
+            return player.getUsername() + " solved the enigma! " ;
         } else {
-            player.addTurn(-1); // Penalty for wrong answer, e.g., lose a turn
-            return player.getUsername() + " failed to solve the enigma and lost a turn! " + getDescription();
+            player.block(1); // Penalty for wrong answer, e.g., lose a turn
+            return player.getUsername() + " failed to solve the enigma and lost a turn! ";
         }
     }
 }
