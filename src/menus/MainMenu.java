@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 
 public class MainMenu extends AbstractMenu {
 
+    public MainMenu() {
+        super("");
+    }
+
     protected void displayMenu() {
         System.out.println("Main Menu");
         System.out.println("1. Start Game");

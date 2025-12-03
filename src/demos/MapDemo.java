@@ -18,7 +18,7 @@ public class MapDemo {
         Room kitchen = new Room("Kitchen", null);
         Room diningRoom = new Room("Dining Room", null);
         Room bedroom = new Room("Bedroom", null);
-        Room bathroom = new Room("Bathroom", new ImpossibleEnigma("chuck norris can solve math problems"));
+        Room bathroom = new Room("Bathroom", new ImpossibleEnigma("chuck norris can solve math problems"," "));
         Room tresure = new Room("tresure", null);
 
         map.addVertex(entery);

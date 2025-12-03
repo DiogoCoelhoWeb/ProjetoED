@@ -26,6 +26,11 @@ public abstract class  MapLocations {
     }
 
 
+    /**
+     * Retrieves the ChoiceEvent associated with this map location.
+     *
+     * @return the ChoiceEvent object linked to this map location, or null if no event is associated
+     */
     public ChoiceEvent getEvent() {
         return this.event;
     }

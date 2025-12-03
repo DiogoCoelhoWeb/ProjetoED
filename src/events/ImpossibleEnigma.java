@@ -4,8 +4,11 @@ import player.Player;
 
 public class ImpossibleEnigma extends ChoiceEvent{
 
-    public ImpossibleEnigma(String description) {
+    private String response;
+
+    public ImpossibleEnigma(String description,String response) {
         super(description);
+        this.response=response;
     }
 
     @Override
