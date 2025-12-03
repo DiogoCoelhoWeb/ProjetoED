@@ -1,48 +1,50 @@
 package menus;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class MainMenu extends AbstractMenu {
 
-    private static final int START_GAME = 1;
-    private static final int LOAD_GAME = 2;
-    private static final int CREATE_MAP = 3;
-    private static final int EXIT = 0;
-
-    public MainMenu() {
-        super("Main Menu");
-        addOption(START_GAME, "Start New Game");
-        addOption(LOAD_GAME, "Load Game");
-        addOption(CREATE_MAP, "Create map");
-        addOption(EXIT, "Exit");
+    protected void displayMenu() {
+        System.out.println("Main Menu");
+        System.out.println("1. Start Game");
+        System.out.println("2. Load Game");
+        System.out.println("3. Create Map");
+        System.out.println("4. Exit");
     }
 
-    @Override
-    protected void executeOption(int option) {
-        switch (option) {
-            case START_GAME:
-                System.out.println("Starting a new game...");
-                // Here you would typically instantiate and run your game logic
-                // For now, just a message
-                break;
-            case LOAD_GAME:
-                System.out.println("Loading game...");
+    public void runMenu() {
+        displayMenu();
+        System.out.println("Please select an option");
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            String input = br.readLine();
+            int option = Integer.parseInt(input);
+            executeOption(option);
+        } catch (IOException | NumberFormatException ignored) {
 
-                break;
-            case CREATE_MAP:
-              //  new MapEditorMenu().run();
-                break;
-            case EXIT:
-                System.out.println("Exiting game. Goodbye!");
-                break;
-            default:
-                System.out.println("Invalid option. Please try again.");
-                break;
         }
     }
 
-    @Override
-    protected int getExitOptionId() {
-        return EXIT;
+    protected void executeOption(int option) {
+        do {
+            switch (option) {
+                case 1:
+                    System.out.println("Starting game...");
+                    break;
+                case 2:
+                    System.out.println("Loading game...");
+                    break;
+                case 3:
+                    System.out.println("Creating map...");
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+        } while (option < 1 || option > 4);
     }
 }

@@ -42,6 +42,7 @@ public abstract class  MapLocations {
     public String getName() {
         return name;
     }
+    public abstract boolean isStart();
 
     /**
      * Retrieves the type of the map location as a string. This method is

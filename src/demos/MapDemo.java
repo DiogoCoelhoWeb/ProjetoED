@@ -40,7 +40,7 @@ public class MapDemo {
 
 
         Iterator<MapLocations> it = map.iteratorDFS(entery);
-        while(it.hasNext()){
+       while(it.hasNext()){
             System.out.println(it.next().getName());
             System.out.println("\n****** Events *****");
             try {

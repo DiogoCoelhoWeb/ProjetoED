@@ -9,6 +9,11 @@ public class Treasure extends MapLocations{
     }
 
     @Override
+    public boolean isStart() {
+        return false;
+    }
+
+    @Override
     public String getType() {
         return "Treasure Room";
     }

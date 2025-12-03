@@ -1,0 +1,594 @@
+{
+  "quizzes":[
+    {
+      "id": "history1",
+      "question": "I was a wall that divided a city for nearly three decades, a symbol of the Cold War's grip. What am I?",
+      "choices": [
+        "The Great Wall of China",
+        "The Berlin Wall",
+        "Hadrian's Wall"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory1",
+      "question": "I am a pattern of whole and half steps that sounds 'happy'. I have a relative that sounds 'sad'. What am I?",
+      "choices": [
+        "The Pentatonic Scale",
+        "The Chromatic Scale",
+        "The Major Scale"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal1",
+      "question": "Known as the 'Prince of Darkness' I bit the head off a bat (allegedly). Who am I?",
+      "choices": [
+        "Ronnie James Dio",
+        "Lemmy Kilmister",
+        "Ozzy Osbourne"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history2",
+      "question": "I was a ship that sank on its maiden voyage in 1912, deemed 'unsinkable' by many. What am I?",
+      "choices": [
+        "The Lusitania",
+        "The Queen Mary",
+        "The Titanic"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "music_theory2",
+      "question": "I am the interval spanning eight letter names. My frequency ratio is exactly 2:1. What am I?",
+      "choices": [
+        "A Perfect Fifth",
+        "An Octave",
+        "A Major Third"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal2",
+      "question": "My album 'Master of Puppets' is often cited as a cornerstone of thrash metal. I had a bassist named Cliff Burton. What band am I?",
+      "choices": [
+        "Slayer",
+        "Megadeth",
+        "Metallica"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history3",
+      "question": "I was the Queen of Egypt, famous for my relationships with Julius Caesar and Mark Antony. Who am I?",
+      "choices": [
+        "Nefertiti",
+        "Cleopatra",
+        "Hatshepsut"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory3",
+      "question": "I am a chord of three notes (triad) built on the first, third, and fifth degrees of a scale. What am I?",
+      "choices": [
+        "A Seventh Chord",
+        "A Tonic Triad",
+        "An Arpeggio"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal3",
+      "question": "I sang for the bands 'Rainbow', 'Black Sabbath', and 'Dio', and I am credited with popularizing the 'devil horns' hand gesture. Who am I?",
+      "choices": [
+        "Rob Halford",
+        "Bruce Dickinson",
+        "Ronnie James Dio"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history4",
+      "question": "I was a massive, bloody conflict fought between 1914 and 1918, involving trench warfare and new terrible weapons. What am I?",
+      "choices": [
+        "The Seven Years' War",
+        "The First World War",
+        "The Napoleonic Wars"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory4",
+      "question": "I am a musical instruction meaning 'softly' or 'quiet'. My symbol is the letter 'p'. What am I?",
+      "choices": [
+        "Forte",
+        "Piano",
+        "Allegro"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal4",
+      "question": "I am a British band whose iconic album cover features a prism dispersing light. I am known for 'Comfortably Numb'. Who am I?",
+      "choices": [
+        "Led Zeppelin",
+        "The Who",
+        "Pink Floyd"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history5",
+      "question": "I am the Italian explorer credited with proving the world was round by completing the first circumnavigation (though I died mid-journey). Who am I?",
+      "choices": [
+        "Christopher Columbus",
+        "Ferdinand Magellan",
+        "Vasco da Gama"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory5",
+      "question": "I am a key signature with four sharps: F#, C#, G#, and D#. What key am I?",
+      "choices": [
+        "E Major",
+        "A Major",
+        "B Major"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal5",
+      "question": "I am a band led by James Hetfield and Lars Ulrich. My debut album was 'Kill 'Em All'. What band am I?",
+      "choices": [
+        "Megadeth",
+        "Anthrax",
+        "Metallica"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history6",
+      "question": "I was a devastating disease in the 14th century, wiping out an estimated 75 to 200 million people in Europe and Asia. What am I?",
+      "choices": [
+        "Smallpox",
+        "The Black Death",
+        "The Spanish Flu"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory6",
+      "question": "I am a rhythmic symbol that indicates a note should be held for half a measure in 4/4 time. What am I?",
+      "choices": [
+        "A Quarter Note",
+        "A Whole Note",
+        "A Half Note"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal6",
+      "question": "I am the British band known for 'Stairway to Heaven' and a famously enigmatic fourth album (IV). Who am I?",
+      "choices": [
+        "Deep Purple",
+        "Black Sabbath",
+        "Led Zeppelin"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history7",
+      "question": "I was the year the United States declared its independence from Great Britain. What year am I?",
+      "choices": [
+        "1789",
+        "1776",
+        "1812"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory7",
+      "question": "I am the interval called the 'Devil in Music' due to my dissonant sound, composed of three whole steps. What am I?",
+      "choices": [
+        "A Perfect Fourth",
+        "A Tritone",
+        "A Minor Second"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal7",
+      "question": "I am the lead vocalist of Iron Maiden, who is also a licensed airline pilot. Who am I?",
+      "choices": [
+        "Bruce Dickinson",
+        "Robert Plant",
+        "Axl Rose"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "history8",
+      "question": "I am the Ancient Greek city-state famous for its military prowess and the fierce warriors of Thermopylae. What am I?",
+      "choices": [
+        "Athens",
+        "Corinth",
+        "Sparta"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "music_theory8",
+      "question": "I am the clef whose center curl wraps around the note G4. What clef am I?",
+      "choices": [
+        "Bass Clef",
+        "Treble Clef",
+        "Alto Clef"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal8",
+      "question": "I am the guitarist for Black Sabbath, famous for playing with the tips of my fingers cut off after a factory accident. Who am I?",
+      "choices": [
+        "Tony Iommi",
+        "Ritchie Blackmore",
+        "Eddie Van Halen"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "history9",
+      "question": "I am a 16th-century movement started by Martin Luther that led to a schism in Western Christianity. What am I?",
+      "choices": [
+        "The Crusades",
+        "The Renaissance",
+        "The Protestant Reformation"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "music_theory9",
+      "question": "I am a dynamic marking that means 'very loud'. My symbol is 'ff'. What am I?",
+      "choices": [
+        "Mezzo Forte",
+        "Fortissimo",
+        "Pianissimo"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal9",
+      "question": "I am the lead singer of Queen, known for my incredible vocal range and showmanship. Who am I?",
+      "choices": [
+        "David Bowie",
+        "Freddie Mercury",
+        "Mick Jagger"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "history10",
+      "question": "I was the last Roman emperor in the West, deposed in 476 AD, marking the traditional end of the Western Roman Empire. Who am I?",
+      "choices": [
+        "Julius Caesar",
+        "Constantine the Great",
+        "Romulus Augustulus"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "music_theory10",
+      "question": "I am a symbol placed before a note to raise its pitch by one half-step. What am I?",
+      "choices": [
+        "A Flat",
+        "A Natural",
+        "A Sharp"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal10",
+      "question": "I am a band known for the operatic rock anthem 'Bohemian Rhapsody'. What band am I?",
+      "choices": [
+        "Rush",
+        "Led Zeppelin",
+        "Queen"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history11",
+      "question": "I am the year the Berlin Wall finally fell. What year am I?",
+      "choices": [
+        "1989",
+        "1991",
+        "1975"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "music_theory11",
+      "question": "I am a scale where every step is a whole step (W-W-W-W-W-W). What kind of scale am I?",
+      "choices": [
+        "Diatonic Scale",
+        "Chromatic Scale",
+        "Whole-Tone Scale"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal11",
+      "question": "I am the band that created the iconic album 'The Number of the Beast', featuring mascot Eddie. What band am I?",
+      "choices": [
+        "Judas Priest",
+        "Iron Maiden",
+        "Motörhead"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "history12",
+      "question": "I am the famous general who crossed the Alps with war elephants to attack Rome. Who am I?",
+      "choices": [
+        "Alexander the Great",
+        "Julius Caesar",
+        "Hannibal Barca"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "music_theory12",
+      "question": "I am a set of five parallel lines and four spaces on which music is written. What am I?",
+      "choices": [
+        "A Ledger Line",
+        "A Staff (Stave)",
+        "A Measure"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal12",
+      "question": "I am the American band, led by Dave Mustaine, formed after he was fired from Metallica. What band am I?",
+      "choices": [
+        "Slayer",
+        "Megadeth",
+        "Exodus"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "history13",
+      "question": "I am the Chinese invention that was originally used to treat skin diseases, but later revolutionized warfare and celebrations. What am I?",
+      "choices": [
+        "Silk",
+        "Gunpowder",
+        "The Compass"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory13",
+      "question": "I am a key signature with no sharps or flats. What major key am I?",
+      "choices": [
+        "G Major",
+        "A Minor",
+        "C Major"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal13",
+      "question": "I am the lead singer of Guns N' Roses, known for my high, soaring vocals and erratic stage presence. Who am I?",
+      "choices": [
+        "Axl Rose",
+        "Steven Tyler",
+        "Jon Bon Jovi"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "history14",
+      "question": "I am the name of the period in Europe (roughly 14th to 16th century) characterized by a rebirth of classical art, literature, and learning. What am I?",
+      "choices": [
+        "The Enlightenment",
+        "The Middle Ages",
+        "The Renaissance"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "music_theory14",
+      "question": "I am a symbol placed after a note that increases its duration by half of its original value. What am I?",
+      "choices": [
+        "A Tie",
+        "A Dot",
+        "A Fermata"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal14",
+      "question": "I am the German band that achieved massive international success with the rock ballad 'Wind of Change'. What band am I?",
+      "choices": [
+        "Accept",
+        "Rammstein",
+        "Scorpions"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history15",
+      "question": "I was a non-violent political leader in India who advocated for independence from British rule through civil disobedience. Who am I?",
+      "choices": [
+        "Jawaharlal Nehru",
+        "Mahatma Gandhi",
+        "Subhas Chandra Bose"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory15",
+      "question": "I am the term for the vertical alignment of notes, indicating that they should be played simultaneously. What am I?",
+      "choices": [
+        "Melody",
+        "Rhythm",
+        "Harmony"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "rock_metal15",
+      "question": "I am the thrash metal band known for the song 'Angel of Death' and my anti-Christian imagery. What band am I?",
+      "choices": [
+        "Testament",
+        "Kreator",
+        "Slayer"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "history16",
+      "question": "I am the ancient library, a great center of knowledge, that was famously destroyed, though exactly how is debated. What am I?",
+      "choices": [
+        "The Library of Pergamum",
+        "The Library of Alexandria",
+        "The British Library"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "music_theory16",
+      "question": "I am the symbol used to cancel a sharp or flat, returning a note to its original pitch. What am I?",
+      "choices": [
+        "A Tie",
+        "A Natural",
+        "A Rest"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "rock_metal16",
+      "question": "I am the band that made the 'Screaming for Vengeance' album and whose lead singer is known for his signature leather and studs look. What band am I?",
+      "choices": [
+        "Motörhead",
+        "Judas Priest",
+        "AC/DC"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "history17",
+      "question": "I was a young girl who kept a famous diary while hiding from the Nazis in Amsterdam during WWII. Who am I?",
+      "choices": [
+        "Elie Wiesel",
+        "Corrie ten Boom",
+        "Anne Frank"
+      ],
+      "correct": 2
+    }
+  ],
+  "dead_end_quotes": [
+    {
+      "id": "quote1",
+      "question": "You choose your destiny with a single decision. Do you choose: Rock, Paper, or Scissors?",
+      "choices": ["Rock", "Paper", "Scissors"],
+      "response_quote": "Your choice of Rock was perfectly inadequate. Chuck Norris chooses 'Nokia 3310'."
+    },
+    {
+      "id": "quote2",
+      "question": "What is the true measure of a man's courage? 'It’s the will of a beast not compared to the will of a god.'",
+      "choices": ["To Fight a Dragon", "To Admit He Was Wrong", "To Play Acoustic at a Metal Concert"],
+      "response_quote": "That wasn't the correct metal lyric, and your choice reflects poor life choices. Dead End."
+    },
+    {
+      "id": "quote3",
+      "question": "I am the ultimate philosophical dilemma: The Nokia 3310's battery life. You must choose its final fate.",
+      "choices": ["Nuclear Explosion", "Falling into a Black Hole", "Trying to Divide by Zero"],
+      "response_quote": "The Nokia's power source remains eternal. Your attempt failed, but at least you didn't crack its screen."
+    },
+    {
+      "id": "quote5",
+      "question": "Chuck Norris's advice on fear: 'You can't run from your fears forever.' Which path do you *avoid*?",
+      "choices": ["The Path of Logical Reasoning", "The Path with the Giant Spider", "The Path of Unused Gift Cards"],
+      "response_quote": "You failed to face your fear. Chuck Norris just roundhouse kicked the spider and it solved the labyrinth for him."
+    },
+    {
+      "id": "quote6",
+      "question": "A wise man once said, 'There is no finish line. When you reach one goal, find a new one.' Which is your next impossible goal?",
+      "choices": ["Tame a Velociraptor", "Befriend a Time-Traveling Walrus", "Find the Left Sock"],
+      "response_quote": "The sock remains elusive. This goal is mathematically impossible, as defined by the laws of laundry physics."
+    },
+    {
+      "id": "quote7",
+      "question": "You must choose your weapon for the final boss (who is a grumpy mime).",
+      "choices": ["A Treble Clef Sword", "A Muted Trumpet", "A Sarcastic Remark"],
+      "response_quote": "The Mime just built an invisible wall. You can't beat that with a musical notation. He wins."
+    },
+    {
+      "id": "quote8",
+      "question": "The paradox of choice: If you had to choose a theme song for the Nokia 3310's immortality, which one would it be?",
+      "choices": ["'Another Brick in the Wall' (Pink Floyd)", "'Highway to Hell' (AC/DC)", "'Forever Young' (Alphaville)"],
+      "response_quote": "Incorrect. The correct answer is 'Snake'. You are now stuck playing the game until the battery dies (never)."
+    },
+    {
+      "id": "quote9",
+      "question": "What happens when you try to reason with a cat about your life choices?",
+      "choices": ["It Judges You Silently", "It Yawns and Walks Away", "It Offers Valid Life Advice"],
+      "response_quote": "The cat has spoken. Your life choices are irrelevant. Meow. Dead End."
+    },
+    {
+      "id": "quote10",
+      "question": "Chuck Norris's Rule of Logic: 'A fear of Chuck Norris is known as logic.' What do you do next?",
+      "choices": ["Apply Logic", "Run in Terror", "Ask Him for a Selfie"],
+      "response_quote": "Error! The logic of fearing Chuck Norris is a circular argument that breaks the labyrinth. You are stuck in a time loop."
+    }
+  ],
+  "lever_events": [
+    {
+      "id": "lever_diff_1",
+      "question": "You must choose a **lever** to be worthy of thy path. One leads to glory; the other, to sorrow. Which one calls to you?",
+      "choices": [
+        "Lever 1: Path of the Dragon",
+        "Lever 2: Path of the Serpent"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "lever_diff_2",
+      "question": "A voice echoes: 'To pass, you must demonstrate the knowledge of the Devil's Interval, the Tritone.' Choose the correct key.",
+      "choices": [
+        "Lever 1: C to F# (Tritone)",
+        "Lever 2: C to G (Perfect 5th)",
+        "Lever 3: C to E (Major 3rd)"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "lever_diff_3",
+      "question": "The ancient mechanism demands the year of the British Invasion leader, **The Beatles'** debut album ('Please Please Me').",
+      "choices": [
+        "Lever 1: 1965",
+        "Lever 2: 1963",
+        "Lever 3: 1964",
+        "Lever 4: 1962"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "lever_diff_4",
+      "question": "A forgotten language dictates: 'The key is the first chord inversion: a chord where the third is in the bass.'",
+      "choices": [
+        "Lever 1: Root Position",
+        "Lever 2: First Inversion",
+        "Lever 3: Second Inversion",
+        "Lever 4: Third Inversion",
+        "Lever 5: Final Inversion"
+      ],
+      "correct": 1
+    }
+  ]
+}
