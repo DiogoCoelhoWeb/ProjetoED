@@ -194,7 +194,7 @@ public class GameLoop {
      * @throws IOException If an input or output error occurs during the movement process.
      */
     private void handleMove(Player player) throws IOException {
-        ArrayUnorderedList<MapLocations> neighbors = getNeighbors(player.getCurrentLocation());
+        ArrayUnorderedList<MapLocations> neighbors = map.getGraph().getNeighbors(player.getCurrentLocation());
 
         if (neighbors.isEmpty()) {
             System.out.println("DeadEnd");
@@ -370,30 +370,5 @@ public class GameLoop {
             System.out.println("************************************************");
             gameRunning = false;
         }
-    }
-
-
-    /**
-     * Retrieves the list of neighboring locations directly connected to the specified location.
-     * This method uses a depth-first traversal to identify connected locations in the graph.
-     *
-     * @param current the MapLocations object representing the location
-     *                for which neighbors are to be determined
-     * @return an ArrayUnorderedList containing MapLocations objects
-     *         that are direct neighbors of the specified location
-     */
-    private ArrayUnorderedList<MapLocations> getNeighbors(MapLocations current) {
-        ArrayUnorderedList<MapLocations> neighbors = new ArrayUnorderedList<>();
-        // Using iteratorDFS to traverse all nodes and check connectivity
-        // This is a workaround because Graph doesn't expose neighbors directly
-        Iterator<MapLocations> it = map.getGraph().iteratorDFS(current);
-
-        while (it.hasNext()) {
-            MapLocations loc = it.next();
-            if (loc != current && map.veifyToVertex(current, loc)) {
-                neighbors.addToRear(loc);
-            }
-        }
-        return neighbors;
     }
 }

@@ -325,6 +325,25 @@ public class Graph<T> implements GraphADT<T> {
         return this.adjMatrix[getIndex(startVertex)][getIndex(targetVertex)];
     }
 
+
+    /**
+     * Retrieves all the neighboring vertices directly connected to the specified vertex.
+     * It iterates through the adjacency matrix to identify connections and collects
+     * the corresponding vertices.
+     *
+     * @param vertex the vertex whose neighbors are to be retrieved
+     * @return a list of neighboring vertices connected to the specified vertex
+     */
+    public ArrayUnorderedList<T> getNeighbors(T vertex){
+        ArrayUnorderedList<T> neighbors = new ArrayUnorderedList<>();
+        for(int i = 0; i < numVertices; i++){
+            if(adjMatrix[getIndex(vertex)][i]){
+                neighbors.addToRear(vertices[i]);
+            }
+        }
+        return neighbors;
+    }
+
     /**
      * Determines if the graph is empty. A graph is considered empty if it has no vertices.
      *

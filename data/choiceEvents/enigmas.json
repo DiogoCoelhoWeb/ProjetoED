@@ -496,7 +496,7 @@
       "id": "quote1",
       "question": "You choose your destiny with a single decision. Do you choose: Rock, Paper, or Scissors?",
       "choices": ["Rock", "Paper", "Scissors"],
-      "response_quote": "Your choice of Rock was perfectly inadequate. Chuck Norris chooses 'Nokia 3310'."
+      "response_quote": "Your choice  was perfectly inadequate. Chuck Norris chooses 'Nokia 3310'."
     },
     {
       "id": "quote2",
