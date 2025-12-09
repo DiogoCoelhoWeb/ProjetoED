@@ -11,6 +11,10 @@ public class ImpossibleEnigma extends ChoiceEvent{
         this.response=response;
     }
 
+    public String getResponse() {
+        return response;
+    }
+
     @Override
     public String execute(Player player) {
         // No penalties for an impossible enigma, player just stays in the current room.

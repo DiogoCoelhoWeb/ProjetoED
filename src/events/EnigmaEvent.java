@@ -12,6 +12,10 @@ public class EnigmaEvent extends ChoiceEvent{
         this.correctChoice = correctChoice;
     }
 
+    public int getCorrectChoice() {
+        return correctChoice;
+    }
+
     @Override
     public String execute(Player player) {
         // For now, simulate a player choice

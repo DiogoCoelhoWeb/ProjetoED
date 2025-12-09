@@ -30,6 +30,10 @@ public class LoseTurnEvent extends BuffDebuffEvent{
        this.numTurns= (int) (Math.random() * 4) + 1;
     }
 
+    public int getNumTurns() {
+        return numTurns;
+    }
+
     @Override
     public String execute(Player player) {
         player.block(this.numTurns);

@@ -3,6 +3,8 @@ package events;
 import player.Player;
 
 public abstract class Event {
+    private static int idCounter = 0;
+    protected int id;
     protected String description;
 
     /**
@@ -12,6 +14,27 @@ public abstract class Event {
      */
     public Event(String description) {
         this.description = description;
+        this.id = idCounter++;
+    }
+
+    /**
+     * Retrieves the unique identifier of the event.
+     * @return The unique ID of the event.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Sets the unique identifier of the event. This method is primarily
+     * for use during deserialization to restore the original ID.
+     * @param id The ID to set for the event.
+     */
+    public void setId(int id) {
+        this.id = id;
+        if (id >= idCounter) { // Ensure idCounter keeps track of the highest ID
+            idCounter = id + 1;
+        }
     }
 
     /**

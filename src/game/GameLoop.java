@@ -4,6 +4,7 @@ import events.ChoiceEvent;
 import events.Event;
 import lists.ArrayUnorderedList;
 import map.Map;
+import player.Bot;
 import player.Player;
 import player.PlayerManager;
 import rooms.MapLocations;
@@ -59,13 +60,83 @@ public class GameLoop {
                 if (!gameRunning) break;
 
                 try {
-                    playTurn(currentPlayer);
+                    if (currentPlayer instanceof Bot) {
+                        playBotTurn((Bot) currentPlayer);
+                    } else {
+                        playTurn(currentPlayer);
+                    }
                 } catch (IOException e) {
                     System.err.println("Erro de I/O durante o turno do jogador " + currentPlayer.getUsername() + ": " + e.getMessage());
                     gameRunning = false; // Critical error, stop game
                 }
             }
         }
+    }
+
+    /**
+     * Manages and executes the actions of a single turn for a specified bot in the game.
+     *
+     * @param bot The bot whose turn is being processed.
+     */
+    private void playBotTurn(Bot bot) {
+        if (bot.isBlocked()) {
+            System.out.println("Bot " + bot.getUsername() + " is blocked.");
+            bot.endTurn();
+            return;
+        }
+
+        while (bot.getTurns() > 0 && gameRunning) {
+            System.out.println("\n------------------------------------------------");
+            System.out.println("Turno de Bot: " + bot.getUsername());
+            System.out.println("Localizacao Atual: " + bot.getCurrentLocation().getName());
+
+            MapLocations target = bot.chooseMove(map.getGraph());
+
+            if (target == null) {
+                System.out.println("Bot waiting...");
+                bot.useTurn();
+                continue;
+            }
+
+            System.out.println("Bot chose to move to: " + target.getName());
+
+            if (processBotRoomEntry(bot, target)) {
+                performMove(bot, target);
+            }
+        }
+        bot.endTurn();
+    }
+
+    /**
+     * Processes the requirements for a bot to enter a target room.
+     * Automates interaction with events (e.g., random answers).
+     *
+     * @param bot    The bot attempting entry.
+     * @param target The target location.
+     * @return true if entry allowed, false otherwise.
+     */
+    private boolean processBotRoomEntry(Bot bot, MapLocations target) {
+        ChoiceEvent targetEvent = target.getEvent();
+
+        // If no interactive event, proceed
+        if (targetEvent == null || targetEvent.getChoices().isEmpty()) {
+            return true;
+        }
+
+        System.out.println("Bot encountering event: " + targetEvent.getDescription());
+
+        // Bot uses its logic (skill) to choose an answer
+        int botChoice = bot.solveEnigma(targetEvent);
+
+        System.out.println(targetEvent.execute(bot, botChoice));
+
+        if (bot.isBlocked()) {
+            System.out.println("Bot failed enigma and is blocked.");
+            bot.useTurn(); // Consume turn penalty
+            return false;
+        }
+
+        return true;
     }
 
     /**
