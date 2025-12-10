@@ -36,6 +36,15 @@ public abstract class  MapLocations {
     }
 
     /**
+     * Retrieves the unique identifier for this map location.
+     *
+     * @return the integer identifier of the map location
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
      * Constructs a MapLocations instance with the specified name.
      *
      * @param name the name of the map location

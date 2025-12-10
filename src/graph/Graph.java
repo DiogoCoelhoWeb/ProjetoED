@@ -389,4 +389,22 @@ public class Graph<T> implements GraphADT<T> {
     public int size() {
         return this.numVertices;
     }
+
+    /**
+     * Retrieves the array of vertices in the graph.
+     *
+     * @return an array containing the vertices of the graph
+     */
+    public T[] getVertices() {
+        return vertices;
+    }
+
+    /**
+     * Retrieves the number of vertices in the graph.
+     *
+     * @return the number of vertices
+     */
+    public int getNumVertices() {
+        return numVertices;
+    }
 }
