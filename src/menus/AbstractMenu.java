@@ -1,6 +1,5 @@
 package menus;
 
-import map.Map;
 import map.MapManager;
 
 public abstract class AbstractMenu {

@@ -20,12 +20,14 @@ public class GameLoop {
     private PlayerManager playerManager;
     private boolean gameRunning;
     private BufferedReader reader; // Declare BufferedReader as a field
+    private GameLogger logger;
 
     public GameLoop(Map map) {
         this.map = map;
         this.playerManager = new PlayerManager();
         this.gameRunning = true;
         this.reader = new BufferedReader(new InputStreamReader(System.in)); // Initialize once
+        this.logger = new GameLogger();
     }
 
     public PlayerManager getPlayerManager() {
@@ -50,6 +52,7 @@ public class GameLoop {
         }
 
         System.out.println("Jogo Iniciado!");
+        logger.log("Game started with " + playerManager.getPlayers().size() + " players.");
 
         while (gameRunning) {
             Iterator<Player> playerIterator = playerManager.getPlayers().iterator();
@@ -60,6 +63,7 @@ public class GameLoop {
                 if (!gameRunning) break;
 
                 try {
+                    logger.log("Turn Start: " + currentPlayer.getUsername());
                     if (currentPlayer instanceof Bot) {
                         playBotTurn((Bot) currentPlayer);
                     } else {
@@ -67,10 +71,15 @@ public class GameLoop {
                     }
                 } catch (IOException e) {
                     System.err.println("Erro de I/O durante o turno do jogador " + currentPlayer.getUsername() + ": " + e.getMessage());
+                    logger.log("Error: I/O Exception for " + currentPlayer.getUsername());
                     gameRunning = false; // Critical error, stop game
                 }
             }
         }
+        
+        System.out.println("Game Over.");
+        logger.log("Game Over.");
+        logger.saveReport(playerManager);
     }
 
     /**
@@ -128,7 +137,9 @@ public class GameLoop {
         // Bot uses its logic (skill) to choose an answer
         int botChoice = bot.solveEnigma(targetEvent);
 
-        System.out.println(targetEvent.execute(bot, botChoice));
+        String outcome = targetEvent.execute(bot, botChoice);
+        System.out.println(outcome);
+        logger.logEvent(bot, targetEvent, outcome);
 
         if (bot.isBlocked()) {
             System.out.println("Bot failed enigma and is blocked.");
@@ -187,6 +198,7 @@ public class GameLoop {
         System.out.println("Chose:");
         System.out.println("1. Move");
         System.out.println("0. GIve up Turn");
+        System.out.println("88. Save Game");
         System.out.println("99. Exit");
     }
 
@@ -215,6 +227,9 @@ public class GameLoop {
             case 0:
                 skipRemainingTurns(player);
                 break;
+            case 88:
+                saveGame();
+                break;
             case 99:
                 if (confirmExit()) {
                     gameRunning = false;
@@ -223,6 +238,21 @@ public class GameLoop {
             default:
                 System.out.println("Invalid input.");
         }
+    }
+
+    private void saveGame() throws IOException {
+        System.out.print("Enter save filename (e.g., saved_game.json): ");
+        String filename = reader.readLine();
+        if (filename == null || filename.trim().isEmpty()) filename = "saved_game.json";
+        if (!filename.endsWith(".json")) filename += ".json";
+
+        // Using a hardcoded map ID or one from the map object if available.
+        // Ideally map.getId() should exist. For now, "map_user" or similar.
+        String mapId = "map_user"; // Default fallback
+        // Attempt to guess based on map name
+        if (map.getName().contains("Demo")) mapId = "map_demo";
+
+
     }
 
     /**
@@ -393,7 +423,9 @@ public class GameLoop {
             }
         }
 
-        System.out.println(targetEvent.execute(player, answer - 1));
+        String outcome = targetEvent.execute(player, answer - 1);
+        System.out.println(outcome);
+        logger.logEvent(player, targetEvent, outcome);
     }
 
     /**
@@ -411,16 +443,58 @@ public class GameLoop {
         player.useTurn();
 
         if (edgeEvent != null) {
-            System.out.println("Evento de Caminho: " + edgeEvent.execute(player));
+            String outcome = edgeEvent.execute(player);
+            System.out.println("Evento de Caminho: " + outcome);
+            logger.logEvent(player, edgeEvent, outcome);
+        } else {
+            logger.log(player.getUsername() + " moved to " + target.getName() + " (no edge event).");
         }
 
         // Executa evento da sala se não for interativo (já processado)
         ChoiceEvent targetEvent = target.getEvent();
-        if (targetEvent != null && targetEvent.getChoices().isEmpty()) {
+        
+        if (targetEvent instanceof events.SwapEvent) {
+            handleSwapEvent(player);
+        } else if (targetEvent != null && targetEvent.getChoices().isEmpty()) {
             System.out.println("Evento da Sala: " + targetEvent.execute(player));
         }
 
         checkWinCondition(player, target);
+    }
+
+    /**
+     * Handles the SwapEvent by swapping the current player's location with another random player.
+     *
+     * @param player The player triggering the swap.
+     */
+    private void handleSwapEvent(Player player) {
+        System.out.println("--- SWAP EVENT TRIGGERED ---");
+        
+        lists.ArrayUnorderedList<Player> players = playerManager.getPlayers();
+        if (players.size() <= 1) {
+            System.out.println("No other players to swap with. The rift closes.");
+            return;
+        }
+
+        // Pick a random other player
+        Player targetPlayer = player;
+        while (targetPlayer == player) {
+            int randIndex = (int) (Math.random() * players.size());
+            Iterator<Player> it = players.iterator();
+            for (int i = 0; i <= randIndex; i++) {
+                targetPlayer = it.next();
+            }
+        }
+
+        System.out.println("Swapping positions with " + targetPlayer.getUsername() + "!");
+
+        MapLocations playerLoc = player.getCurrentLocation();
+        MapLocations targetLoc = targetPlayer.getCurrentLocation();
+
+        player.setCurrentLocation(targetLoc);
+        targetPlayer.setCurrentLocation(playerLoc);
+        
+        logger.logEvent(player, new events.SwapEvent(), player.getUsername() + " swapped positions with " + targetPlayer.getUsername());
     }
 
     /**

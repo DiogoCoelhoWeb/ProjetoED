@@ -1,0 +1,193 @@
+{
+  "rooms": [
+    {
+      "name": "Entrance North",
+      "description": "A cold wind blows from the entrance.",
+      "id": "room_0",
+      "event": null,
+      "type": "entrance"
+    },
+    {
+      "name": "Entrance South",
+      "description": "The sun warms the stone floor.",
+      "id": "room_1",
+      "event": null,
+      "type": "entrance"
+    },
+    {
+      "name": "Entrance East",
+      "description": "Moss covers the walls here.",
+      "id": "room_2",
+      "event": null,
+      "type": "entrance"
+    },
+    {
+      "name": "Entrance West",
+      "description": "A faint smell of sulfur.",
+      "id": "room_3",
+      "event": null,
+      "type": "entrance"
+    },
+    {
+      "name": "Hallway of Echoes",
+      "description": "Your footsteps are loud here.",
+      "id": "room_4",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Armory",
+      "description": "Rusted weapons line the walls.",
+      "id": "room_5",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Library",
+      "description": "Books have long since rotted away.",
+      "id": "room_6",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Dining Hall",
+      "description": "A long table sits empty.",
+      "id": "room_7",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Music Room",
+      "description": "A broken piano sits in the corner.",
+      "id": "room_8",
+      "event": {
+        "type": "enigma",
+        "question": "I have keys but no locks. I have a space but no room. You can enter, but never go outside. What am I?",
+        "choices": [
+          "A Map",
+          "A Keyboard",
+          "A Piano"
+        ],
+        "correct": 1
+      },
+      "type": "room"
+    },
+    {
+      "name": "Gallery",
+      "description": "Portraits watch you pass.",
+      "id": "room_9",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Kitchen",
+      "description": "Cold ovens and shattered pots.",
+      "id": "room_10",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Pantry",
+      "description": "Empty shelves.",
+      "id": "room_11",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Dungeon",
+      "description": "Chains hang from the ceiling.",
+      "id": "room_12",
+      "event": {
+        "type": "enigma",
+        "question": "The prisoner left a note: 'I am the number of the beast'. What number is scratched on the wall?",
+        "choices": [
+          "777",
+          "666",
+          "13"
+        ],
+        "correct": 1
+      },
+      "type": "room"
+    },
+    {
+      "name": "Guard Room",
+      "description": "A game of cards was left unfinished.",
+      "id": "room_13",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Torture Chamber",
+      "description": "Best not to linger.",
+      "id": "room_14",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Sewers",
+      "description": "The smell is unbearable.",
+      "id": "room_15",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Crypt",
+      "description": "Silent and respectful.",
+      "id": "room_16",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Chapel",
+      "description": "A shimmering altar. You feel a strange pull...",
+      "id": "room_17",
+      "event": {"type": "SwapEvent", "description": "A mysterious altar teleports you!"},
+      "type": "room"
+    },
+    {
+      "name": "Throne Room",
+      "description": "The king is long gone.",
+      "id": "room_18",
+      "event": null,
+      "type": "room"
+    },
+    {
+      "name": "Treasure Vault",
+      "description": "Gold glitters in the torchlight!",
+      "id": "room_19",
+      "event": null,
+      "type": "treasure"
+    }
+  ],
+  "corridors": [
+    { "origin": "room_0", "destination": "room_4", "event": null },
+    { "origin": "room_1", "destination": "room_5", "event": null },
+    { "origin": "room_2", "destination": "room_6", "event": null },
+    { "origin": "room_3", "destination": "room_7", "event": null },
+    { "origin": "room_4", "destination": "room_8", "event": {"type": "LoseTurnEvent"} },
+    { "origin": "room_4", "destination": "room_5", "event": null },
+    { "origin": "room_5", "destination": "room_9", "event": {"type": "GoBackEvent"} },
+    { "origin": "room_5", "destination": "room_6", "event": null },
+    { "origin": "room_6", "destination": "room_10", "event": null },
+    { "origin": "room_6", "destination": "room_7", "event": null },
+    { "origin": "room_7", "destination": "room_11", "event": null },
+    { "origin": "room_7", "destination": "room_4", "event": null },
+    { "origin": "room_8", "destination": "room_12", "event": null },
+    { "origin": "room_8", "destination": "room_9", "event": null },
+    { "origin": "room_9", "destination": "room_13", "event": null },
+    { "origin": "room_9", "destination": "room_10", "event": null },
+    { "origin": "room_10", "destination": "room_14", "event": null },
+    { "origin": "room_10", "destination": "room_11", "event": null },
+    { "origin": "room_11", "destination": "room_15", "event": null },
+    { "origin": "room_11", "destination": "room_8", "event": null },
+    { "origin": "room_12", "destination": "room_16", "event": null },
+    { "origin": "room_13", "destination": "room_16", "event": null },
+    { "origin": "room_14", "destination": "room_17", "event": null },
+    { "origin": "room_15", "destination": "room_18", "event": null },
+    { "origin": "room_16", "destination": "room_19", "event": null },
+    { "origin": "room_17", "destination": "room_19", "event": null },
+    { "origin": "room_18", "destination": "room_17", "event": null }
+  ],
+  "map_name": "User Generated Map",
+  "id": "map_usergenerated"
+}

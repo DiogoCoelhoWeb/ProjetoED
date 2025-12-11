@@ -90,4 +90,8 @@ public class Map {
         return this.graph.veifyToVertex(from, to);
     }
 
+    public ArrayUnorderedList<MapLocations> getStartLocation() {
+        return this.startLocation;
+    }
+
 }

@@ -1,7 +1,7 @@
 package rooms;
 
 import events.ChoiceEvent;
-import events.Event;
+
 
 public abstract class  MapLocations {
 

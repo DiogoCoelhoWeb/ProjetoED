@@ -71,7 +71,7 @@ public class NetworkGraph<T> extends Graph<T> implements NetworkADT<T> {
     public void addEdge(T vertex1, T vertex2, Event event) {
         super.addEdge(vertex1, vertex2); // Updates adjMatrix (connectivity)
 
-        if (!(event instanceof BuffDebuffEvent)) {
+        if (event != null && !(event instanceof BuffDebuffEvent)) {
             throw new IllegalArgumentException("Events for corridor must be of type BuffDebuffEvent");
         }
 

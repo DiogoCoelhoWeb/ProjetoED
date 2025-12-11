@@ -22,6 +22,16 @@ public class LoseTurnEvent extends BuffDebuffEvent{
     }
 
     /**
+     * Constructs a LoseTurnEvent with a specific number of turns to lose.
+     * @param turns The number of turns the player will lose.
+     */
+    public LoseTurnEvent(int turns) {
+        super(Quotes.getRandomLoseTurnQuote());
+        this.numTurns = turns;
+        setDescription(this.description + " You will lose " + this.numTurns + " turns.");
+    }
+
+    /**
      * Randomly assigns a value to the number of turns for the event,
      * within the range of 1 to 4 inclusive.
      * This helps determine the duration of the "Lose Turn" effect.

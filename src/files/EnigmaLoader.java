@@ -23,8 +23,6 @@ public class EnigmaLoader {
         JSONParser parser = new JSONParser();
         ChoiceEventManager manager = new ChoiceEventManager();
 
-        System.out.println("--- 🧩 Carregamento de Eventos de Escolha Iniciado ---");
-
         try (FileReader reader = new FileReader(ENIGMAS_PATH)) {
 
             Object object = parser.parse(reader);
@@ -36,7 +34,6 @@ public class EnigmaLoader {
 
             loadLeverEvents(rootObject, manager);
 
-            System.out.println("\n--- Carregamento Concluído com Sucesso ---");
 
         } catch (Exception e) {
             System.err.println("ERRO FATAL durante o carregamento do JSON. Detalhes:");
@@ -59,7 +56,6 @@ public class EnigmaLoader {
         JSONArray quizzesArray = (JSONArray) rootObject.get("quizzes");
 
         if (quizzesArray != null) {
-            System.out.println("\n## Quizzes/Enigmas Normais Carregados (Total: " + quizzesArray.size() + ")");
 
             for (Object item : quizzesArray) {
                 try {
@@ -107,7 +103,6 @@ public class EnigmaLoader {
         JSONArray deadEndArray = (JSONArray) rootObject.get("dead_end_quotes");
 
         if (deadEndArray != null) {
-            System.out.println("\n## Dead Ends/Quotes Impossíveis Carregados (Total: " + deadEndArray.size() + ")");
 
             for (Object item : deadEndArray) {
                 try {
@@ -146,7 +141,6 @@ public class EnigmaLoader {
         JSONArray leverEventsArray = (JSONArray) rootObject.get("lever_events");
 
         if (leverEventsArray != null) {
-            System.out.println("\n## Lever Events loaded (Total: " + leverEventsArray.size() + ")");
 
             for (Object item : leverEventsArray) {
                 try {

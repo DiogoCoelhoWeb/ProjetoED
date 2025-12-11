@@ -11,7 +11,12 @@
       "name": "Hall",
       "description": "What is 2+2?",
       "id": "room_1",
-      "event": "event_room_1",
+      "event": {
+        "type": "enigma",
+        "question": "What is 2+2?",
+        "choices": ["3", "4", "5"],
+        "correct": 1
+      },
       "type": "room"
     },
     {
