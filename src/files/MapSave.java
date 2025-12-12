@@ -25,102 +25,54 @@ public class MapSave {
      */
     public void saveMap(Map map) {
         String filePath = MAP_PATH + map.getName() + ".json";
-        JSONObject mapJson = new JSONObject();
+        FileWriter fileWriter = null;
 
-        // Map Metadata
-        // Since Map doesn't have an ID, we generate one or use the name.
-        // The PDF example uses "maps_1", we'll use "map_" + name hash or just name.
-        mapJson.put("map_name", map.getName());
-
-        // Rooms
-        JSONArray roomsJson = new JSONArray();
-        NetworkGraph<MapLocations> graph = map.getGraph();
-        Object[] vertices = graph.getVertices();
-        int numVertices = graph.getNumVertices();
-
-        for (int i = 0; i < numVertices; i++) {
-            MapLocations loc = (MapLocations) vertices[i];
-            if (loc == null) continue;
-
-            JSONObject roomJson = new JSONObject();
-            roomJson.put("name", loc.getName());
-            
-            // MapLocations doesn't have description, so we use a placeholder or event description
-            if (loc.getEvent() != null) {
-                roomJson.put("description", loc.getEvent().getDescription());
-            } else {
-                roomJson.put("description", "No description available");
-                roomJson.put("event", null);
-            }
-            
-            if (loc.isStart()) {
-                roomJson.put("type", "entrance");
-            } else if (loc.getType() == RoomType.TREASURE_ROOM) {
-                 roomJson.put("type", "treasure");
-            } else {
-                 roomJson.put("type", "room");
-            }
-
-            roomsJson.add(roomJson);
-        }
-        mapJson.put("rooms", roomsJson);
-
-        // Corridors
-        JSONArray corridorsJson = new JSONArray();
-        // To avoid duplicates in undirected graph, we track processed edges
-        // But since we can't easily map objects to visited status without modifying them,
-        // we can iterate and only add if id1 < id2.
-        
-        for (int i = 0; i < numVertices; i++) {
-            MapLocations u = (MapLocations) vertices[i];
-            if (u == null) continue;
-
-            for (int j = i + 1; j < numVertices; j++) {
-                MapLocations v = (MapLocations) vertices[j];
-                if (v == null) continue;
-
-                if (graph.veifyToVertex(u, v)) {
-                    JSONObject corridorJson = new JSONObject();
-                    corridorJson.put("origin", "room_" + u.getName());
-                    corridorJson.put("destination", "room_" + v.getName());
-
-                    Event event = graph.getEdgeWeight(u, v);
-                    if (event != null) {
-                        corridorJson.put("event", "event_corridor_" + event.getId());
-                    } else {
-                         corridorJson.put("event", null);
-                    }
-
-                    corridorsJson.add(corridorJson);
-                }
-            }
-        }
-        mapJson.put("corridors", corridorsJson);
-
-        // Write to file
-        try (FileWriter file = new FileWriter(filePath)) {
-            file.write(mapJson.toJSONString());
-            file.flush();
+        try {
+            fileWriter = new FileWriter(filePath);
+            JSONObject mapJson = serializeMap(map);
+            fileWriter.write(mapJson.toJSONString());
+            fileWriter.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error saving map to file: " + e.getMessage());
         }
+    }
+
+    private JSONObject serializeMap(Map map) {
+        JSONObject mapJson = new JSONObject();
+        mapJson.put("name", map.getName());
+        mapJson.put("locations", serializeLocations(map));
+        mapJson.put("corridors", serializeCorridors(map));
+        return mapJson;
     }
 
     private ArrayUnorderedList<MapLocations> getLocationsList(Map map) {
         ArrayUnorderedList<MapLocations> locations = new ArrayUnorderedList<>();
-        MapLocations[] vertices = map.getGraph().getVertices();
+        Object[] vertices = map.getGraph().getVertices();
 
-        for (MapLocations vertex : vertices) {
-            locations.addToRear(vertex);
+        for (Object vertex : vertices) {
+            if (vertex instanceof MapLocations) {
+                locations.addToRear((MapLocations) vertex);
+            }
         }
 
         return locations;
     }
 
+    private JSONArray serializeLocations(Map map) {
+        JSONArray locationsJson = new JSONArray();
+        ArrayUnorderedList<MapLocations> locations = getLocationsList(map);
+
+        for (MapLocations location : locations) {
+            locationsJson.add(serializeLocation(location));
+        }
+
+        return locationsJson;
+    }
+
     private JSONObject serializeLocation(MapLocations location) {
         JSONObject locationJson = new JSONObject();
         locationJson.put("name", location.getName());
-        locationJson.put("type", location.getType().toString());
+        locationJson.put("type", location.getType().ordinal());
         locationJson.put("isStart", location.isStart());
 
         if (location.getEvent() == null) {
@@ -148,20 +100,34 @@ public class MapSave {
         return choicesJson;
     }
 
-    private JSONObject serializeCorridor(Map map) {
-        int i = 1;
-        int j = 1;
-
-        JSONObject corridorJson = new JSONObject();
+    private JSONArray serializeCorridors(Map map) {
+        JSONArray corridorsJson = new JSONArray();
         NetworkGraph<MapLocations> graph = map.getGraph();
-        ArrayUnorderedList<MapLocations> vertices = getLocationsList(map);
+        ArrayUnorderedList<MapLocations> locations = getLocationsList(map);
 
-        for (MapLocations location: vertices) {
+        for (MapLocations location: locations) {
             ArrayUnorderedList<MapLocations> neighbors = graph.getNeighbors(location);
-            for (MapLocations neighbor: neighbors) {
+            MapLocations from = location;
+
+            for (MapLocations neighborList : neighbors) {
+                JSONObject corridorJson = new JSONObject();
+                corridorJson.put("origin", locations.indexOf(from));
+                corridorJson.put("destination", locations.indexOf(neighborList));
+
+                Event event = graph.getEdgeWeight(from, neighborList);
+
+                if (event != null) {
+                    corridorJson.put("event", event.getDescription());
+                } else {
+                    corridorJson.put("event", null);
+                }
+
+                if(!corridorsJson.contains(corridorJson) && locations.indexOf(from) < locations.indexOf(neighborList)) {
+                    corridorsJson.add(corridorJson);
+                }
             }
         }
 
-        return corridorJson;
+        return corridorsJson;
     }
 }

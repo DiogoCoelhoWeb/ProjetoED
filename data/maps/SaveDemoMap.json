@@ -1,46 +1,54 @@
 {
-  "rooms": [
+  "corridors": [
+    {
+      "origin": 0,
+      "destination": 1,
+      "event": null
+    },
+    {
+      "origin": 1,
+      "destination": 2,
+      "event": null
+    },
+    {
+      "origin": 2,
+      "destination": 3,
+      "event": null
+    }
+  ],
+  "name": "SaveDemoMap",
+  "locations": [
     {
       "name": "Entrance",
-      "description": "No description available",
-      "event": null,
-      "type": "entrance"
+      "isStart": true,
+      "type": 0,
+      "event": null
     },
     {
       "name": "Hall",
-      "description": "What is 2+2?",
-      "type": "room"
+      "isStart": false,
+      "type": 1,
+      "event": {
+        "description": "What is 2+2?",
+        "correctChoice": 1,
+        "choices": [
+          "3",
+          "4",
+          "5"
+        ]
+      }
     },
     {
       "name": "Kitchen",
-      "description": "No description available",
-      "event": null,
-      "type": "room"
+      "isStart": false,
+      "type": 1,
+      "event": null
     },
     {
       "name": "Treasure Room",
-      "description": "No description available",
-      "event": null,
-      "type": "treasure"
-    }
-  ],
-  "corridors": [
-    {
-      "origin": ,
-      "destination": "room_Hall",
-      "event": null
-    },
-    {
-      "origin": "room_Hall",
-      "destination": "room_Kitchen",
-      "event": null
-    },
-    {
-      "origin": "room_Kitchen",
-      "destination": "room_Treasure Room",
+      "isStart": false,
+      "type": 2,
       "event": null
     }
-  ],
-  "map_name": "SaveDemoMap",
-  "id": "map_savedemomap"
+  ]
 }
