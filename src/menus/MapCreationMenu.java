@@ -96,6 +96,7 @@ public class MapCreationMenu extends AbstractMenu{
             isStart = true;
             this.hasStartRoom = true;
         }
+
         event = choiceEventMenu.createChoiceEvent();
 
         if (type == RoomType.TREASURE_ROOM) {

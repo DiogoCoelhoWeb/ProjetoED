@@ -4,6 +4,11 @@ import player.Player;
 
 public abstract class BuffDebuffEvent extends Event{
 
+    /**
+     * Constructs a BuffDebuffEvent with the specified description.
+     *
+     * @param description the text description of the event
+     */
     public BuffDebuffEvent(String description) {
         super(description);
     }

@@ -23,9 +23,6 @@ public class MapSave {
         String filePath = MAP_PATH + map.getName() + ".json";
         JSONObject mapJson = new JSONObject();
 
-        // Map Metadata
-        // Since Map doesn't have an ID, we generate one or use the name.
-        // The PDF example uses "maps_1", we'll use "map_" + name hash or just name.
         mapJson.put("id", "map_" + map.getName().replaceAll("\\s+", "_").toLowerCase());
         mapJson.put("map_name", map.getName());
 
@@ -40,14 +37,14 @@ public class MapSave {
             if (loc == null) continue;
 
             JSONObject roomJson = new JSONObject();
-            String roomId = "room_" + loc.getId();
-            roomJson.put("id", roomId);
+            //String roomId = "room_" + loc.getId();
+           // roomJson.put("id", roomId);
             roomJson.put("name", loc.getName());
             
             // MapLocations doesn't have description, so we use a placeholder or event description
             if (loc.getEvent() != null) {
-                roomJson.put("description", loc.getEvent().getDescription());
-                roomJson.put("event", "event_room_" + loc.getId()); // or loc.getEvent().getId()
+             //   roomJson.put("description", loc.getEvent().getDescription());
+             //   roomJson.put("event", "event_room_" + loc.getId()); // or loc.getEvent().getId()
             } else {
                 roomJson.put("description", "No description available");
                 roomJson.put("event", null);
@@ -55,7 +52,7 @@ public class MapSave {
             
             if (loc.isStart()) {
                 roomJson.put("type", "entrance");
-            } else if (loc.getType().equalsIgnoreCase("Treasure Room")) {
+            } else if (loc.getType().equals("Treasure Room")) {
                  roomJson.put("type", "treasure");
             } else {
                  roomJson.put("type", "room");
@@ -81,8 +78,8 @@ public class MapSave {
 
                 if (graph.veifyToVertex(u, v)) {
                     JSONObject corridorJson = new JSONObject();
-                    corridorJson.put("origin", "room_" + u.getId());
-                    corridorJson.put("destination", "room_" + v.getId());
+                   // corridorJson.put("origin", "room_" + u.getId());
+                    //corridorJson.put("destination", "room_" + v.getId());
 
                     Event event = graph.getEdgeWeight(u, v);
                     if (event != null) {

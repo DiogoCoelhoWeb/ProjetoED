@@ -30,7 +30,6 @@ public class MapLoaderDemo {
             for (Object obj : vertices) {
                 if (obj instanceof MapLocations) {
                     MapLocations loc = (MapLocations) obj;
-                    System.out.println(" - [" + loc.getId() + "] " + loc.getName() + " (" + loc.getType() + ")");
                     if (loc.getEvent() != null) {
                          System.out.println("   Room Event: " + loc.getEvent().getDescription());
                     }
@@ -52,7 +51,7 @@ public class MapLoaderDemo {
             }
 
         } else {
-            System.out.println("❌ Failed to load map.");
+            System.out.println("Failed to load map.");
         }
     }
 }

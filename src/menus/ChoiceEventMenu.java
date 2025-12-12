@@ -6,7 +6,9 @@
 package menus;
 
 import events.ChoiceEvent;
+import events.ChoiceEventManager;
 import events.EnigmaEvent;
+import files.EnigmaLoader;
 import lists.ArrayUnorderedList;
 import lists.BSTOrderedList;
 import player.Player;
@@ -23,15 +25,29 @@ public class ChoiceEventMenu extends AbstractMenu{
         System.out.println("1. Add Choice");
         System.out.println("2. Remove Choice");
         System.out.println("3. View Choices");
+        System.out.println("5. Random Event");
         System.out.println("4. Save");
     }
 
     public ChoiceEvent createChoiceEvent(){
         int correctChoice;
+        ChoiceEventManager choiceEventManager = EnigmaLoader.loadEnigmas();
 
         printSeparator();
         System.out.println("Create Room Event");
         System.out.println();
+
+        String hasEvent = readInput("Do you want to have an event? (y/n): ");
+        if(hasEvent.equalsIgnoreCase("n")){
+            return null;
+        }
+
+        String randomEvent = readInput("Do you want a random event? (y/n): ");
+        if(randomEvent.equalsIgnoreCase("y")){
+            return choiceEventManager.getRandomChoiceEvent();
+        }
+
+
         String eventName = readInput("Enter the question of the event: ");
         runMenu();
         correctChoice = selectCorrectChoice();
@@ -56,7 +72,7 @@ public class ChoiceEventMenu extends AbstractMenu{
             String input = readInput("Please select an option: ");
             try{
                 int option = Integer.parseInt(input);
-                if(option >= 1 && option <= 4){
+                if(option >= 1 && option <= 5){
                     isValid = true;
                     executeOption(option);
 

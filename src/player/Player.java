@@ -37,15 +37,6 @@ public class Player {
     }
 
     /**
-     * Retrieves the unique identifier of the player.
-     *
-     * @return the unique ID of the player as an integer
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
      * Retrieves the username of the player.
      *
      * @return the player's username as a string
@@ -228,18 +219,6 @@ public class Player {
         while(!temp.isEmpty()) {
             this.pathHistory.push(temp.pop());
         }
-    }
-    
-    /**
-     * Forcefully sets the player ID. Used for loading game state.
-     * @param id The ID to set.
-     */
-    public void setId(int id) {
-        // This is a "final" field in current code. We need to remove final modifier from 'id' field first.
-        // Checking previous file content... 'private final int id;'
-        // We cannot modify final field here.
-        // Strategy: We will modify the field definition in a separate replace call or simply accept that loaded players get new IDs (which is fine if ID isn't used for logic).
-        // But let's assume we want to match. We'll need to remove 'final' from 'id' declaration first.
     }
 
     /**

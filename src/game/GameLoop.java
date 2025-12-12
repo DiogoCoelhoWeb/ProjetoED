@@ -23,6 +23,11 @@ public class GameLoop {
     private BufferedReader reader; // Declare BufferedReader as a field
     private GameLogger logger;
 
+    /**
+     * Constructs a new GameLoop instance, initializing the game components and setting up the environment.
+     *
+     * @param map the game map that defines the environment or area in which the game takes place
+     */
     public GameLoop(Map map) {
         this.map = map;
         this.playerManager = new PlayerManager();
@@ -242,17 +247,15 @@ public class GameLoop {
     }
 
     private void saveGame() throws IOException {
-        System.out.print("Enter save filename (e.g., saved_game.json): ");
+       /* System.out.print("Enter save filename (e.g., saved_game.json): ");
         String filename = reader.readLine();
         if (filename == null || filename.trim().isEmpty()) filename = "saved_game.json";
         if (!filename.endsWith(".json")) filename += ".json";
 
-        // Using a hardcoded map ID or one from the map object if available.
-        // Ideally map.getId() should exist. For now, "map_user" or similar.
         String mapId = "map_user"; // Default fallback
         // Attempt to guess based on map name
         if (map.getName().contains("Demo")) mapId = "map_demo";
-
+*/
 
     }
 
