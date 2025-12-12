@@ -17,16 +17,18 @@ import rooms.MapLocations;
 import events.Event; // NEW
 
 public class GameLogger {
-    private ArrayUnorderedList<String> logs; // Each entry will be a JSON string or simple message
+    private ArrayUnorderedList<String> logs;
 
     public GameLogger() {
         this.logs = new ArrayUnorderedList<>();
     }
 
+    /**
+     * Logs a message with a timestamp. The message is added to the log storage.
+     *
+     * @param message The message to be logged.
+     */
     public void log(String message) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        // For simple log messages, just store as a string for now.
-        // In saveReport(), we'll wrap it in a JSONObject for consistency.
         logs.addToRear(message); 
     }
 
@@ -47,25 +49,30 @@ public class GameLogger {
         eventLog.put("event_description", event.getDescription());
         eventLog.put("outcome", outcomeMessage);
         
-        logs.addToRear(eventLog.toJSONString()); // Store as JSON string
+        logs.addToRear(eventLog.toJSONString());
     }
 
+    /**
+     * Saves a game report containing the game log and player path histories to a JSON file.
+     * The report includes structured event logs and each player's path history during the game.
+     *
+     * @param playerManager the PlayerManager instance that provides access to the list of players
+     *                      and their respective path histories
+     */
     public void saveReport(PlayerManager playerManager) {
         JSONObject report = new JSONObject();
         
-        // Game Log
+
         JSONArray logArray = new JSONArray();
         Iterator<String> logIt = logs.iterator();
         JSONParser parser = new JSONParser(); // New parser instance
         while(logIt.hasNext()){
             String logEntry = logIt.next();
-            // Try to parse as JSON, otherwise wrap in a simple JSONObject
+
             try {
-                // If it's already a JSON string from logEvent, parse it.
                 JSONObject parsedLog = (JSONObject) parser.parse(logEntry);
                 logArray.add(parsedLog);
-            } catch (ParseException | ClassCastException e) { // Catch ParseException and ClassCastException
-                // If it's a simple string log, wrap it.
+            } catch (ParseException | ClassCastException e) {
                 JSONObject simpleLog = new JSONObject();
                 simpleLog.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
                 simpleLog.put("type", "MESSAGE");
@@ -75,7 +82,6 @@ public class GameLogger {
         }
         report.put("game_log", logArray);
 
-        // Player Paths (remains the same)
         JSONArray playersArray = new JSONArray();
         Iterator<Player> playerIt = playerManager.getPlayers().iterator();
         while(playerIt.hasNext()){

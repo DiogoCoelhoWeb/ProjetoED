@@ -1,5 +1,7 @@
 package demos;
 
+import events.BuffDebuffEvent;
+import events.LoseTurnEvent;
 import files.MapSave;
 import map.Map;
 import rooms.Room;
@@ -30,6 +32,8 @@ public class SaveMapDemo {
 
         Treasure treasureRoom = new Treasure("Treasure Room", null);
 
+        BuffDebuffEvent event = new LoseTurnEvent();
+
         // 3. Add locations to map
         // Note: The order might matter for ID generation, but MapSave uses internal IDs.
         demoMap.addLocation(entrance);
@@ -39,7 +43,7 @@ public class SaveMapDemo {
 
         // 4. Connect rooms
         demoMap.addConnection(entrance, hall);
-        demoMap.addConnection(hall, kitchen);
+        demoMap.addConnection(hall, kitchen,event);
         demoMap.addConnection(kitchen, treasureRoom);
 
         // 5. Save the map

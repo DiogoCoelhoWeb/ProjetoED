@@ -20,7 +20,7 @@ public class FourBotsRandomStartDemo {
         ChoiceEventManager eventManager = EnigmaLoader.loadEnigmas();
 
         MapLoader loader = new MapLoader();
-        Map arenaMap = loader.loadMap("data/maps/UserMap.json", eventManager);
+        Map arenaMap = loader.loadMap("data/maps/UserMap.json");
 
         // 5. Initialize GameLoop
         GameLoop gameLoop = new GameLoop(arenaMap);

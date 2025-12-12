@@ -6,7 +6,6 @@ import player.Player;
 public abstract class ChoiceEvent extends Event{
 
    protected ArrayUnorderedList<String> choices;
-   //private String id;
 
     /**
      * Constructs a ChoiceEvent with the specified description.

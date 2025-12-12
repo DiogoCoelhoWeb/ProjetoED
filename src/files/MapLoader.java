@@ -1,8 +1,6 @@
 package files;
 
-import events.BuffDebuffEvent;
-import events.ChoiceEvent;
-import events.ChoiceEventManager;
+import events.*;
 import lists.ArrayUnorderedList;
 import map.Map;
 import org.json.simple.JSONArray;
@@ -13,202 +11,150 @@ import rooms.Room;
 import rooms.Treasure;
 
 import java.io.FileReader;
-import java.util.Iterator;
+
+
 
 public class MapLoader {
 
 
+    private static String mapPath = "data/maps/";
 
 
     /**
-     * Loads a map from a JSON file.
+     * Loads a map from a JSON file, constructs the map object, and populates it
+     * with rooms and connections based on the data in the file.
      *
-     * @param filePath     The path to the JSON map file.
-     * @param eventManager The manager to provide events for the rooms.
-     * @return A constructed Map object, or null if loading failed.
+     * @param mapName the name of the map file to be loaded, without the file extension
+     * @return a Map object populated with locations and their connections
+     * @throws RuntimeException if there is an error while reading or parsing the file
      */
-    public Map loadMap(String filePath, ChoiceEventManager eventManager) {
+    public Map loadMap(String mapName) {
+
         JSONParser parser = new JSONParser();
-        Map map = null;
+        Map map = new Map(mapName);
+        ArrayUnorderedList<MapLocations> createdLocations = new ArrayUnorderedList<>();
 
-        try (FileReader reader = new FileReader(filePath)) {
-            Object obj = parser.parse(reader);
-            JSONObject rootObject = (JSONObject) obj;
+        try (FileReader reader = new FileReader(mapPath + mapName + ".json")){
 
-            // 1. Create Map Object
-            String mapName = (String) rootObject.get("map_name");
-            if (mapName == null) mapName = "Untitled Map";
-            map = new Map(mapName);
+            Object object = parser.parse(reader);
+            JSONObject rootObject = (JSONObject) object;
 
-            // Temporary storage to link rooms by their JSON ID (e.g., "room_1")
-            // Replaced HashMap with parallel ArrayUnorderedLists to comply with project restrictions
-            ArrayUnorderedList<String> roomIds = new ArrayUnorderedList<>();
-            ArrayUnorderedList<MapLocations> roomLocations = new ArrayUnorderedList<>();
-
-            // 2. Process Rooms
-            JSONArray roomsArray = (JSONArray) rootObject.get("rooms");
-            if (roomsArray != null) {
-                for (Object item : roomsArray) {
-                    JSONObject roomJson = (JSONObject) item;
-                    String id = (String) roomJson.get("id");
-                    String name = (String) roomJson.get("name");
-                    String type = (String) roomJson.get("type");
-                    Object eventObj = roomJson.get("event");
-                    
-                    // Determine Event (only embedded JSON objects are supported now)
-                    ChoiceEvent event = null;
-                    if (eventObj instanceof JSONObject) {
-                        event = parseEmbeddedEvent((JSONObject) eventObj);
-                    } else if (eventObj != null) {
-                        System.err.println("Warning: Event for room " + name + " is not an embedded JSON object. Skipping event.");
-                    }
-
-                    // Create Room Instance
-                    MapLocations location;
-                    if ("treasure".equalsIgnoreCase(type) || "Treasure Room".equalsIgnoreCase(type)) {
-                        location = new Treasure(name, event);
-                    } else {
-                        boolean isStart = "entrance".equalsIgnoreCase(type);
-                        location = new Room(name, event, isStart);
-                    }
-
-                    map.addLocation(location);
-                    roomIds.addToRear(id);
-                    roomLocations.addToRear(location);
-                }
-            }
-
-            // 3. Process Corridors
-            JSONArray corridorsArray = (JSONArray) rootObject.get("corridors");
-            if (corridorsArray != null) {
-                for (Object item : corridorsArray) {
-                    JSONObject corridorJson = (JSONObject) item;
-                    String originId = (String) corridorJson.get("origin"); // "origin" in example, check alternative "from"
-                    String destId = (String) corridorJson.get("destination"); // "destination" in example, check alternative "to"
-
-                    if (originId == null) originId = (String) corridorJson.get("from");
-                    if (destId == null) destId = (String) corridorJson.get("to");
-
-                    MapLocations origin = findLocationById(roomIds, roomLocations, originId);
-                    MapLocations destination = findLocationById(roomIds, roomLocations, destId);
-
-                    if (origin != null && destination != null) {
-                        BuffDebuffEvent corridorEvent = null;
-                        Object corridorEventObj = corridorJson.get("event");
-
-                        if (corridorEventObj instanceof JSONObject) {
-                            corridorEvent = parseEmbeddedBuffDebuffEvent((JSONObject) corridorEventObj);
-                        } else if (corridorEventObj != null) {
-                            System.err.println("Warning: Event for corridor " + originId + " -> " + destId + " is not an embedded JSON object. Skipping event.");
-                        }
-
-                        map.addConnection(origin, destination, corridorEvent);
-
-                    } else {
-                        System.err.println("Warning: Skipping corridor between undefined rooms: " + originId + " -> " + destId);
-                    }
-                }
-            }
-
-            System.out.println("--- Map Loaded Successfully: " + map.getName() + " ---");
+            loadRooms(rootObject, createdLocations,map);
+            loadConnections(rootObject, map, createdLocations);
 
         } catch (Exception e) {
-            System.err.println("FATAL ERROR loading map: " + e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
-
         return map;
     }
 
     /**
-     * Helper method to find a location by its JSON ID using parallel ArrayUnorderedLists.
+     * Loads the rooms from the given JSON object and populates the map with
+     * corresponding locations. The method processes the "locations" array in
+     * the JSON, creates MapLocations objects based on their type, and adds
+     * them to the provided map and a list of created locations.
+     *
+     * @param rootObject the JSON object containing the map's data, including the "locations" array
+     * @param createdLocations an unordered list to store the created MapLocations objects
+     * @param map the map to which the loaded locations will be added
      */
-    private MapLocations findLocationById(ArrayUnorderedList<String> ids, ArrayUnorderedList<MapLocations> locations, String id) {
-        if (id == null) return null;
-        Iterator<String> idIterator = ids.iterator();
-        Iterator<MapLocations> locationIterator = locations.iterator();
-        while (idIterator.hasNext() && locationIterator.hasNext()) {
-            String currentId = idIterator.next();
-            MapLocations currentLocation = locationIterator.next();
-            if (currentId.equals(id)) {
-                return currentLocation;
+    private void loadRooms(JSONObject rootObject,  ArrayUnorderedList<MapLocations> createdLocations, Map map) {
+        JSONArray locationsArray = (JSONArray) rootObject.get("locations");
+        if (locationsArray != null) {
+            for (Object locObj : locationsArray) {
+                JSONObject locJson = (JSONObject) locObj;
+                String name = (String) locJson.get("name");
+                boolean isStart = (boolean) locJson.get("isStart");
+                int type = ((Number) locJson.get("type")).intValue();
+
+                // Load Event
+                JSONObject eventJson = (JSONObject) locJson.get("event");
+                ChoiceEvent event = null;
+                if (eventJson != null) {
+                    String description = (String) eventJson.get("description");
+                    int correctChoice = 0;
+                    if (eventJson.containsKey("correctChoice")) {
+                        correctChoice = ((Number) eventJson.get("correctChoice")).intValue();
+                    }
+                    event = new EnigmaEvent(description, correctChoice);
+
+                    JSONArray choicesArray = (JSONArray) eventJson.get("choices");
+                    if (choicesArray != null) {
+                        for (Object choiceObj : choicesArray) {
+                            event.addChoice((String) choiceObj);
+                        }
+                    }
+                }
+
+                MapLocations location;
+                switch (type) {
+                    case 2: // Treasure Room
+                        location = new Treasure(name, event);
+                        break;
+                    case 0: // Entrance Hall
+                    case 1: // Room
+                    default:
+                        location = new Room(name, event, isStart);
+                        break;
+                }
+
+                map.addLocation(location);
+                createdLocations.addToRear(location);
             }
         }
-        return null;
     }
 
     /**
-     * Parses an embedded event object from the JSON map file.
-     * Supports "enigma", "impossible", "lever", and "swap" types.
+     * Populates the map's connections based on the data provided in the JSON object.
+     * The method processes the "corridors" array from the JSON file, creating connections
+     * between locations in the map, with optional events associated with those connections.
      *
-     * @param eventJson The JSON object defining the event.
-     * @return The constructed ChoiceEvent, or null if parsing fails.
+     * @param rootObject the JSON object containing the map's data, specifically the "corridors" array
+     * @param map the map to which the connections will be added
+     * @param createdLocations an unordered list of pre-created MapLocations objects used to establish connections
      */
-    private ChoiceEvent parseEmbeddedEvent(JSONObject eventJson) {
-        String type = (String) eventJson.get("type");
-        String description = (String) eventJson.get("question");
-        if (description == null) description = (String) eventJson.get("description");
+    private void loadConnections(JSONObject rootObject, Map map, ArrayUnorderedList<MapLocations> createdLocations) {
+        JSONArray corridorsArray = (JSONArray) rootObject.get("corridors");
+        if (corridorsArray != null) {
+            for (Object corrObj : corridorsArray) {
+                JSONObject corrJson = (JSONObject) corrObj;
+                int originIdx = ((Number) corrJson.get("origin")).intValue();
+                int destIdx = ((Number) corrJson.get("destination")).intValue();
 
-        ChoiceEvent event = null;
+                if (originIdx >= 0 && originIdx < createdLocations.size() &&
+                        destIdx >= 0 && destIdx < createdLocations.size()) {
 
-        if ("enigma".equalsIgnoreCase(type)) {
-            Long correctLong = (Long) eventJson.get("correct");
-            int correct = (correctLong != null) ? correctLong.intValue() : 0;
-            event = new events.EnigmaEvent(description, correct);
-        } else if ("impossible".equalsIgnoreCase(type)) {
-            String response = (String) eventJson.get("response_quote");
-            event = new events.ImpossibleEnigma(description, response);
-        } else if ("lever".equalsIgnoreCase(type)) {
-            Long correctLong = (Long) eventJson.get("correct");
-            int correct = (correctLong != null) ? correctLong.intValue() : 0;
-            event = new events.LeverEvent(description, correct);
-        } else if ("swap".equalsIgnoreCase(type)) { // Added SwapEvent parsing
-            event = new events.SwapEvent();
-            if (description == null) description = "You have stepped into a dimensional rift!";
-            event.setDescription(description);
-        }
+                    MapLocations origin = createdLocations.get(originIdx);
+                    MapLocations dest = createdLocations.get(destIdx);
 
-        if (event != null) {
-            JSONArray choices = (JSONArray) eventJson.get("choices");
-            if (choices != null) {
-                for (Object c : choices) {
-                    event.addChoice((String) c);
+                    JSONObject eventJson = (JSONObject) corrJson.get("event");
+                    BuffDebuffEvent event = null;
+
+                    if (eventJson != null) {
+                        String description = (String) eventJson.get("description");
+                        String rawType = (String) eventJson.get("type");
+
+                        // Normalização
+                        String type = rawType != null ? rawType.toUpperCase().replace("_", "") : "";
+
+                        if (type.equals("LOSETURN")) {
+                            int numTurns = eventJson.containsKey("turns") ? ((Number) eventJson.get("turns")).intValue() : 1;
+                            event = new LoseTurnEvent(numTurns, description);
+                        } else if (type.equals("GOBACK")) {
+                            event = new GoBackEvent(description);
+                        }
+                    }
+
+                    if (event != null) {
+                        map.addConnection(origin, dest, event);
+                    } else {
+                        map.addConnection(origin, dest);
+                    }
                 }
             }
         }
-        return event;
     }
 
-    /**
-     * Parses an embedded JSON object to create a BuffDebuffEvent for a corridor.
-     * Supports "LoseTurnEvent" and "GoBackEvent" types.
-     *
-     * @param eventJson The JSON object defining the BuffDebuffEvent.
-     * @return The constructed BuffDebuffEvent, or null if parsing fails.
-     */
-    private BuffDebuffEvent parseEmbeddedBuffDebuffEvent(JSONObject eventJson) {
-        String type = (String) eventJson.get("type");
-        String description = (String) eventJson.get("description");
-        if (description == null) description = "Corridor Event"; // Default description
 
-        BuffDebuffEvent event = null;
-
-        if ("LoseTurnEvent".equalsIgnoreCase(type)) {
-            Long value = (Long) eventJson.get("value");
-            if (value != null) {
-                event = new events.LoseTurnEvent(value.intValue());
-            } else {
-                event = new events.LoseTurnEvent();
-            }
-        } else if ("GoBackEvent".equalsIgnoreCase(type)) {
-            event = new events.GoBackEvent();
-        }
-        
-        if (event != null) {
-            event.setDescription(description);
-        }
-        return event;
-    }
 }
 

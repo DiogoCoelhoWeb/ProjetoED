@@ -7,16 +7,27 @@ package menus;
 
 import events.ChoiceEvent;
 import events.EnigmaEvent;
-import lists.ArrayUnorderedList;
 import lists.BSTOrderedList;
-import player.Player;
+
 
 public class ChoiceEventMenu extends AbstractMenu{
 
     private BSTOrderedList<String> choices = new BSTOrderedList<>();
 
+    /**
+     * Constructs a new instance of the ChoiceEventMenu class.
+     */
     public ChoiceEventMenu() {}
 
+    /**
+     * Displays the menu options for the choice event management system.
+     * This method outputs a list of available actions related to managing
+     * choices in the event, including adding, removing, viewing, and saving.
+     *
+     * This method is an implementation of the abstract method {@code displayMenu}
+     * from the superclass and is designed for customizing the menu presentation
+     * specific to managing choices in an event.
+     */
     @Override
     protected void displayMenu() {
         System.out.println("Choice Event Menu");
@@ -26,6 +37,16 @@ public class ChoiceEventMenu extends AbstractMenu{
         System.out.println("4. Save");
     }
 
+    /**
+     * Creates a new ChoiceEvent with a user-defined question, a list of choices,
+     * and a specified correct choice. The method interacts with the user to gather
+     * the necessary inputs, including the question, available choices, and the
+     * correct choice index. It validates the inputs and constructs a fully
+     * initialized ChoiceEvent.
+     *
+     * @return the newly created ChoiceEvent instance containing the question, list
+     *         of choices, and the correct choice index
+     */
     public ChoiceEvent createChoiceEvent(){
         int correctChoice;
 
@@ -45,6 +66,16 @@ public class ChoiceEventMenu extends AbstractMenu{
         return enigmaEvent;
     }
 
+    /**
+     * Executes and manages the user interaction for the Choice Event Menu.
+     * This method runs a loop that displays the menu options, validates user input,
+     * and executes the desired menu option based on the user's choice.
+     *
+     * The menu includes options such as adding choices, removing choices, viewing the current list
+     * of choices, and saving the selections. The method ensures that the "Save" option cannot
+     * be successfully executed unless at least two choices are present.
+     *
+     */
     @Override
     public void runMenu() {
         boolean isValid = false;
@@ -83,6 +114,14 @@ public class ChoiceEventMenu extends AbstractMenu{
         } while(!isValid || !hasSaved);
     }
 
+    /**
+     * Executes the action corresponding to the given menu option.
+     * This method handles the logic for each menu option, invoking specific actions
+     * such as adding a choice, removing a choice, viewing all choices, or exiting the menu.
+     * Invalid options are handled with an error message.
+     *
+     * @param option the selected menu option that determines the action to execute.
+     */
     @Override
     protected void executeOption(int option) {
         switch (option){
@@ -105,6 +144,12 @@ public class ChoiceEventMenu extends AbstractMenu{
         }
     }
 
+    /**
+     * Adds a new choice to the list of choices maintained by the menu.
+     * This method prompts the user to input a new choice, adds it to the
+     * internal list of choices, and provides feedback to the user upon
+     * successful addition. It also prints a separator for visual clarity.
+     */
     private void addChoice() {
         printSeparator();
         String newChoice = readInput("Enter the new choice: ");
@@ -115,6 +160,12 @@ public class ChoiceEventMenu extends AbstractMenu{
         System.out.println("Choice added");
     }
 
+    /**
+     * Removes a choice from the list of available choices.
+     *
+     * Invalid inputs and out-of-range indices are handled with appropriate console messages
+     * to guide the user.
+     */
     private void removeChoice() {
         printSeparator();
         System.out.println("Remove Choice");
@@ -138,6 +189,18 @@ public class ChoiceEventMenu extends AbstractMenu{
         }
     }
 
+    /**
+     * Displays a list of available choices to the user in a numbered format.
+     * Each choice from the collection of choices is printed to the console,
+     * prefixed with its corresponding index number starting from 1.
+     *
+     * This method iterates through all the items in the collection of choices
+     * and outputs them sequentially. It is intended to provide a descriptive
+     * view of the current options available within the menu.
+     *
+     * It relies on the existence and accessibility of the `choices` field,
+     * which is expected to contain the list of options that need to be displayed.
+     */
     private void viewChoices() {
         int index = 1;
         for (String choice : choices) {
@@ -146,6 +209,17 @@ public class ChoiceEventMenu extends AbstractMenu{
         }
     }
 
+    /**
+     * Retrieves the choice at the specified index from the list of choices.
+     * The method iterates through the collection of choices and returns the
+     * choice located at the specified index. If the index is out of the valid
+     * range, an IndexOutOfBoundsException is thrown.
+     *
+     * @param index the zero-based index of the desired choice in the list
+     * @return the choice at the specified index
+     * @throws IndexOutOfBoundsException if the index is less than 0 or exceeds
+     *                                   the size of the list
+     */
     private String choiceAtIndex(int index) {
         for (String choice : choices) {
             if (index == 0) {
@@ -156,6 +230,12 @@ public class ChoiceEventMenu extends AbstractMenu{
         throw new IndexOutOfBoundsException("Index out of bounds");
     }
 
+    /**
+     * Prompts the user to select the correct choice from a list of available options.
+     * Displays the list of choices, validates user input, and ensures a valid selection is made.
+     *
+     * @return The zero-based index of the user's selected choice from the list.
+     */
     private int selectCorrectChoice() {
         int index = 1;
 
@@ -184,6 +264,6 @@ public class ChoiceEventMenu extends AbstractMenu{
             }
         } while (correctIndex == -1);
 
-        return correctIndex - 1; // Convert to zero-based index
+        return correctIndex - 1;
     }
 }

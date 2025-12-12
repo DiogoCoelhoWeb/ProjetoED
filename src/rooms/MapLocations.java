@@ -1,15 +1,13 @@
 package rooms;
 
 import events.ChoiceEvent;
-import events.Event;
+
 
 public abstract class  MapLocations {
 
-    private static int idCounter = 0;
-
     protected String name;
     protected ChoiceEvent event;
-    protected int id;
+
 
     /**
      * Constructs a MapLocations object with the specified name and associated event.
@@ -22,7 +20,6 @@ public abstract class  MapLocations {
     public MapLocations(String name, ChoiceEvent event) {
         this.name = name;
         this.event = event;
-        this.id = idCounter++;
     }
 
 

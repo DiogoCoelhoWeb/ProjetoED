@@ -23,14 +23,24 @@ public class GameLoop {
     private BufferedReader reader; // Declare BufferedReader as a field
     private GameLogger logger;
 
+    /**
+     * Constructor for the GameLoop class, initializing the game environment and necessary components.
+     *
+     * @param map the map object that defines the game world layout and environment
+     */
     public GameLoop(Map map) {
         this.map = map;
         this.playerManager = new PlayerManager();
         this.gameRunning = true;
-        this.reader = new BufferedReader(new InputStreamReader(System.in)); // Initialize once
+        this.reader = new BufferedReader(new InputStreamReader(System.in));
         this.logger = new GameLogger();
     }
 
+    /**
+     * Retrieves the instance of the PlayerManager associated with this class.
+     *
+     * @return the PlayerManager instance
+     */
     public PlayerManager getPlayerManager() {
         return this.playerManager;
     }
@@ -60,7 +70,6 @@ public class GameLoop {
             while (playerIterator.hasNext()) {
                 Player currentPlayer = playerIterator.next();
 
-                // Check if game was stopped during another player's turn (unlikely but safe)
                 if (!gameRunning) break;
 
                 try {
@@ -128,14 +137,12 @@ public class GameLoop {
     private boolean processBotRoomEntry(Bot bot, MapLocations target) {
         ChoiceEvent targetEvent = target.getEvent();
 
-        // If no interactive event, proceed
         if (targetEvent == null || targetEvent.getChoices().isEmpty()) {
             return true;
         }
 
         System.out.println("Bot encountering event: " + targetEvent.getDescription());
 
-        // Bot uses its logic (skill) to choose an answer
         int botChoice = bot.solveEnigma(targetEvent);
 
         String outcome = targetEvent.execute(bot, botChoice);
@@ -213,10 +220,6 @@ public class GameLoop {
      *               provides the context for executing actions such as movement or
      *               skipping turns.
      * @param choice The numerical input representing the player's turn action.
-     *               Acceptable values include:
-     *               - 1: Executes the player's move action.
-     *               - 0: Skips all remaining turns for the player.
-     *               - 99: Asks for exit confirmation and terminates the game if confirmed.
      * @throws IOException If an input or output error occurs during player interaction
      *                     (e.g., handling movement or confirming exit).
      */
@@ -228,9 +231,6 @@ public class GameLoop {
             case 0:
                 skipRemainingTurns(player);
                 break;
-            case 88:
-                saveGame();
-                break;
             case 99:
                 if (confirmExit()) {
                     gameRunning = false;
@@ -241,20 +241,7 @@ public class GameLoop {
         }
     }
 
-    private void saveGame() throws IOException {
-        System.out.print("Enter save filename (e.g., saved_game.json): ");
-        String filename = reader.readLine();
-        if (filename == null || filename.trim().isEmpty()) filename = "saved_game.json";
-        if (!filename.endsWith(".json")) filename += ".json";
 
-        // Using a hardcoded map ID or one from the map object if available.
-        // Ideally map.getId() should exist. For now, "map_user" or similar.
-        String mapId = "map_user"; // Default fallback
-        // Attempt to guess based on map name
-        if (map.getName().contains("Demo")) mapId = "map_demo";
-
-
-    }
 
     /**
      * Skips all remaining turns for the specified player. This method reduces the player's
@@ -283,7 +270,6 @@ public class GameLoop {
         return confirm.equalsIgnoreCase("y");
     }
 
-
     /**
      * Handles the player's movement to a new location during their turn in the game.
      * This method determines the available neighboring locations, allows the player
@@ -305,10 +291,8 @@ public class GameLoop {
 
         MapLocations target = selectTargetLocation(neighbors);
         if (target == null) {
-            return; // Usuário cancelou ou entrada inválida
+            return;
         }
-
-        // Verifica se há enigmas ou bloqueios antes de entrar
         if (processRoomEntryRequirements(player, target)) {
             performMove(player, target);
         }
@@ -370,7 +354,6 @@ public class GameLoop {
     private boolean processRoomEntryRequirements(Player player, MapLocations target) throws IOException {
         ChoiceEvent targetEvent = target.getEvent();
 
-        // Se não há evento interativo, pode entrar
         if (targetEvent == null || targetEvent.getChoices().isEmpty()) {
             return true;
         }
@@ -437,7 +420,6 @@ public class GameLoop {
      * @param target the target location the player is moving to
      */
     private void performMove(Player player, MapLocations target) {
-        // Verifica Evento de Caminho (Aresta)
         Event edgeEvent = map.getGraph().getEdgeWeight(player.getCurrentLocation(), target);
 
         player.moveTo(target, map.getGraph());
@@ -445,58 +427,21 @@ public class GameLoop {
 
         if (edgeEvent != null) {
             String outcome = edgeEvent.execute(player);
-            System.out.println("Evento de Caminho: " + outcome);
+            System.out.println("COrridor Event: " + outcome);
             logger.logEvent(player, edgeEvent, outcome);
         } else {
             logger.log(player.getUsername() + " moved to " + target.getName() + " (no edge event).");
         }
 
-        // Executa evento da sala se não for interativo (já processado)
         ChoiceEvent targetEvent = target.getEvent();
 
-        if (targetEvent instanceof events.SwapEvent) {
-            handleSwapEvent(player);
-        } else if (targetEvent != null && targetEvent.getChoices().isEmpty()) {
-            System.out.println("Evento da Sala: " + targetEvent.execute(player));
+        if (targetEvent != null && targetEvent.getChoices().isEmpty()) {
+            System.out.println("Room Event: " + targetEvent.execute(player));
         }
 
         checkWinCondition(player, target);
     }
 
-    /**
-     * Handles the SwapEvent by swapping the current player's location with another random player.
-     *
-     * @param player The player triggering the swap.
-     */
-    private void handleSwapEvent(Player player) {
-        System.out.println("--- SWAP EVENT TRIGGERED ---");
-
-        lists.ArrayUnorderedList<Player> players = playerManager.getPlayers();
-        if (players.size() <= 1) {
-            System.out.println("No other players to swap with. The rift closes.");
-            return;
-        }
-
-        // Pick a random other player
-        Player targetPlayer = player;
-        while (targetPlayer == player) {
-            int randIndex = (int) (Math.random() * players.size());
-            Iterator<Player> it = players.iterator();
-            for (int i = 0; i <= randIndex; i++) {
-                targetPlayer = it.next();
-            }
-        }
-
-        System.out.println("Swapping positions with " + targetPlayer.getUsername() + "!");
-
-        MapLocations playerLoc = player.getCurrentLocation();
-        MapLocations targetLoc = targetPlayer.getCurrentLocation();
-
-        player.setCurrentLocation(targetLoc);
-        targetPlayer.setCurrentLocation(playerLoc);
-
-        logger.logEvent(player, new events.SwapEvent(), player.getUsername() + " swapped positions with " + targetPlayer.getUsername());
-    }
 
     /**
      * Checks if the win condition for the game has been met. This method evaluates if the

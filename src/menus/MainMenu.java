@@ -1,16 +1,5 @@
 package menus;
 
-import files.MapLoader;
-import game.GameLoop;
-import map.Map;
-import player.Bot;
-import player.Player;
-import events.ChoiceEventManager;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class MainMenu extends AbstractMenu {
 
     public MainMenu() {}
@@ -53,7 +42,8 @@ public class MainMenu extends AbstractMenu {
         do {
             switch (option) {
                 case 1:
-                    System.out.println("Starting game...");
+                    StartGameMenu startGameMenu = new StartGameMenu();
+                    startGameMenu.runMenu();
                     break;
                 case 2:
                     System.out.println("Loading game...");

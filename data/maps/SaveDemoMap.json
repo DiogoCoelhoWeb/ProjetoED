@@ -8,7 +8,11 @@
     {
       "origin": 1,
       "destination": 2,
-      "event": null
+      "event": {
+        "description": "A sudden fatigue overtakes you, halting your progress. You will lose 2 turns.",
+        "type": "LOSETURN",
+        "turns": 2
+      }
     },
     {
       "origin": 2,

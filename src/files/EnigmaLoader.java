@@ -11,6 +11,7 @@ import java.io.FileReader;
 public class EnigmaLoader {
 
     private static final String ENIGMAS_PATH = "data/choiceEvents/enigmas.json";
+
     /**
      * Loads enigma events from a JSON file and initializes a ChoiceEventManager instance.
      * The method parses the JSON content, extracts various types of enigma events

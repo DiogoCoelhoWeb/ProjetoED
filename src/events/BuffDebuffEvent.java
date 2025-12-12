@@ -4,9 +4,16 @@ import player.Player;
 
 public abstract class BuffDebuffEvent extends Event{
 
+    /**
+     * Constructs a BuffDebuffEvent with the specified description,
+     * inheriting behavior as an event with buff or debuff effects.
+     *
+     * @param description the text description of the event
+     */
     public BuffDebuffEvent(String description) {
         super(description);
     }
+
 
     /**
      * Executes the event, applying its effects to the specified player.

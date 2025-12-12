@@ -25,10 +25,19 @@ public class LoseTurnEvent extends BuffDebuffEvent{
      * Constructs a LoseTurnEvent with a specific number of turns to lose.
      * @param turns The number of turns the player will lose.
      */
-    public LoseTurnEvent(int turns) {
-        super(Quotes.getRandomLoseTurnQuote());
+    public LoseTurnEvent(int turns, String description) {
+        super(description);
         this.numTurns = turns;
-        setDescription(this.description + " You will lose " + this.numTurns + " turns.");
+    }
+
+
+    /**
+     * Retrieves the number of turns associated with this event.
+     *
+     * @return the number of turns a player will lose or be affected by this event.
+     */
+    public int getNumTurns() {
+        return numTurns;
     }
 
     /**
@@ -38,10 +47,6 @@ public class LoseTurnEvent extends BuffDebuffEvent{
      */
     private void randomizeTurns() {
        this.numTurns= (int) (Math.random() * 4) + 1;
-    }
-
-    public int getNumTurns() {
-        return numTurns;
     }
 
     @Override
