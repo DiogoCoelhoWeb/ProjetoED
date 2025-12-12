@@ -40,10 +40,19 @@ public class LoseTurnEvent extends BuffDebuffEvent{
        this.numTurns= (int) (Math.random() * 4) + 1;
     }
 
-    public int getNumTurns() {
-        return numTurns;
-    }
 
+
+    /**
+     * Executes the "Lose Turn" event for the specified player. This method applies
+     * the effect of the event, causing the player to lose a defined number of turns,
+     * and returns a string including the player's username and a description of
+     * the event.
+     *
+     * @param player The player affected by the event. The specified player will
+     *               experience the effect of losing turns as defined by the event.
+     * @return A string containing the player's username followed by the event's
+     *         description, indicating the player has been affected by this event.
+     */
     @Override
     public String execute(Player player) {
         player.block(this.numTurns);
