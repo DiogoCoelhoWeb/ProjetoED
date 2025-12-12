@@ -7,11 +7,13 @@ package menus;
 
 public class LinkRoomsMenu extends AbstractMenu{
 
+
+
     public LinkRoomsMenu() {}
 
     @Override
     protected void displayMenu() {
-        
+
     }
 
     @Override

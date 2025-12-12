@@ -11,9 +11,12 @@ import java.awt.desktop.SystemEventListener;
 
 public class RoomTypeMenu extends AbstractMenu{
 
+    private boolean hasTreasureRoom;
     private RoomType type;
 
-    public RoomTypeMenu() {}
+    public RoomTypeMenu(boolean hasTreasureRoom) {
+        this.hasTreasureRoom = hasTreasureRoom;
+    }
 
     public RoomType selectRoomType(){
         runMenu();
@@ -24,6 +27,10 @@ public class RoomTypeMenu extends AbstractMenu{
     protected void displayMenu() {
         System.out.println("Room Type Menu");
         for (RoomType t: RoomType.values()){
+            if(t == RoomType.TREASURE_ROOM && hasTreasureRoom){
+                continue;
+            }
+
             System.out.println((t.ordinal() + 1) + ". " + t.toString());
         }
     }

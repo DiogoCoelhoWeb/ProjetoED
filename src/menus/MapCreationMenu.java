@@ -1,19 +1,33 @@
 package menus;
 
+import events.BuffDebuffEvent;
 import events.ChoiceEvent;
+import lists.ArrayUnorderedList;
+import lists.BSTOrderedList;
 import map.Map;
+import rooms.MapLocations;
 import rooms.Room;
 import rooms.RoomType;
 import rooms.Treasure;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class MapCreationMenu extends AbstractMenu{
 
+    private boolean hasTreasureRoom = false;
+    private boolean hasStartRoom = false;
+
     private Map map;
+    private ArrayUnorderedList<MapLocations> locations = new ArrayUnorderedList<>();
 
     public MapCreationMenu(String mapName) {
         this.map = new Map(mapName);
+    }
+
+    protected Map createMap(){
+        runMenu();
+        return this.map;
     }
 
     protected void displayMenu() {
@@ -71,7 +85,7 @@ public class MapCreationMenu extends AbstractMenu{
     private void createRoom() {
         boolean isStart = false;
         ChoiceEvent event;
-        RoomTypeMenu roomTypeMenu = new RoomTypeMenu();
+        RoomTypeMenu roomTypeMenu = new RoomTypeMenu(this.hasTreasureRoom);
         ChoiceEventMenu choiceEventMenu = new ChoiceEventMenu();
 
         printSeparator();
@@ -80,20 +94,46 @@ public class MapCreationMenu extends AbstractMenu{
 
         if (type == RoomType.ENTRANCE_HALL) {
             isStart = true;
+            this.hasStartRoom = true;
         }
         event = choiceEventMenu.createChoiceEvent();
 
         if (type == RoomType.TREASURE_ROOM) {
-            map.addLocation(new Treasure(name, event));
+            Treasure treasureRoom = new Treasure(name, event);
+            map.addLocation(treasureRoom);
+            this.locations.addToRear(treasureRoom);
+            this.hasTreasureRoom = true;
             return;
         }
 
-        map.addLocation(new Room(name, event, isStart));
+        Room newRoom = new Room(name, event, isStart);
+        map.addLocation(newRoom);
+        this.locations.addToRear(newRoom);
         System.out.println("Room created successfully");
     }
 
     private void linkRooms() {
+        if(this.locations.isEmpty() || this.locations.size() < 2){
+            System.out.println("Not enough rooms to link. Please create more rooms first.");
+            return;
+        }
 
+        SelectRoomMenu selectRoomMenu = new SelectRoomMenu(this.locations);
+
+        System.out.println("Select the first room to link:");
+        MapLocations firstRoom = selectRoomMenu.selectRoom();
+
+        System.out.println("Select the second room to link:");
+        MapLocations secondRoom = selectRoomMenu.selectRoom();
+
+        String buffDebuff = readInput("Do you want an event on this connection? (y/n): ");
+
+        if(buffDebuff.equalsIgnoreCase("y")){
+            BuffDebuffEvent event = new BuffDebuffEventMenu().createBuffDebuffEvent();
+        }
+
+        map.addConnection(firstRoom, secondRoom);
+        System.out.println("Rooms linked successfully");
     }
 
     //private void visualizeMap() {}
