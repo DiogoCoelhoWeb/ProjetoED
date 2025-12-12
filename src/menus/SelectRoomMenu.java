@@ -6,7 +6,6 @@
 package menus;
 
 import lists.ArrayUnorderedList;
-import lists.BSTOrderedList;
 import rooms.MapLocations;
 
 public class SelectRoomMenu extends AbstractMenu{

@@ -3,51 +3,41 @@
     {
       "name": "Entrance",
       "description": "No description available",
-      "id": "room_0",
       "event": null,
       "type": "entrance"
     },
     {
       "name": "Hall",
       "description": "What is 2+2?",
-      "id": "room_1",
-      "event": {
-        "type": "enigma",
-        "question": "What is 2+2?",
-        "choices": ["3", "4", "5"],
-        "correct": 1
-      },
       "type": "room"
     },
     {
       "name": "Kitchen",
       "description": "No description available",
-      "id": "room_2",
       "event": null,
       "type": "room"
     },
     {
       "name": "Treasure Room",
       "description": "No description available",
-      "id": "room_3",
       "event": null,
       "type": "treasure"
     }
   ],
   "corridors": [
     {
-      "origin": "room_0",
-      "destination": "room_1",
+      "origin": ,
+      "destination": "room_Hall",
       "event": null
     },
     {
-      "origin": "room_1",
-      "destination": "room_2",
+      "origin": "room_Hall",
+      "destination": "room_Kitchen",
       "event": null
     },
     {
-      "origin": "room_2",
-      "destination": "room_3",
+      "origin": "room_Kitchen",
+      "destination": "room_Treasure Room",
       "event": null
     }
   ],

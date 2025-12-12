@@ -1,11 +1,14 @@
 package files;
 
+import events.EnigmaEvent;
 import events.Event;
 import graph.NetworkGraph;
+import lists.ArrayUnorderedList;
 import map.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import rooms.MapLocations;
+import rooms.RoomType;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +16,7 @@ import java.io.IOException;
 public class MapSave {
 
     private static final String MAP_PATH = "data/maps/";
+
 
     /**
      * Saves the given Map object to a JSON file at the specified file path.
@@ -26,7 +30,6 @@ public class MapSave {
         // Map Metadata
         // Since Map doesn't have an ID, we generate one or use the name.
         // The PDF example uses "maps_1", we'll use "map_" + name hash or just name.
-        mapJson.put("id", "map_" + map.getName().replaceAll("\\s+", "_").toLowerCase());
         mapJson.put("map_name", map.getName());
 
         // Rooms
@@ -40,14 +43,11 @@ public class MapSave {
             if (loc == null) continue;
 
             JSONObject roomJson = new JSONObject();
-            String roomId = "room_" + loc.getId();
-            roomJson.put("id", roomId);
             roomJson.put("name", loc.getName());
             
             // MapLocations doesn't have description, so we use a placeholder or event description
             if (loc.getEvent() != null) {
                 roomJson.put("description", loc.getEvent().getDescription());
-                roomJson.put("event", "event_room_" + loc.getId()); // or loc.getEvent().getId()
             } else {
                 roomJson.put("description", "No description available");
                 roomJson.put("event", null);
@@ -55,7 +55,7 @@ public class MapSave {
             
             if (loc.isStart()) {
                 roomJson.put("type", "entrance");
-            } else if (loc.getType().equalsIgnoreCase("Treasure Room")) {
+            } else if (loc.getType() == RoomType.TREASURE_ROOM) {
                  roomJson.put("type", "treasure");
             } else {
                  roomJson.put("type", "room");
@@ -81,8 +81,8 @@ public class MapSave {
 
                 if (graph.veifyToVertex(u, v)) {
                     JSONObject corridorJson = new JSONObject();
-                    corridorJson.put("origin", "room_" + u.getId());
-                    corridorJson.put("destination", "room_" + v.getId());
+                    corridorJson.put("origin", "room_" + u.getName());
+                    corridorJson.put("destination", "room_" + v.getName());
 
                     Event event = graph.getEdgeWeight(u, v);
                     if (event != null) {
@@ -104,5 +104,64 @@ public class MapSave {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private ArrayUnorderedList<MapLocations> getLocationsList(Map map) {
+        ArrayUnorderedList<MapLocations> locations = new ArrayUnorderedList<>();
+        MapLocations[] vertices = map.getGraph().getVertices();
+
+        for (MapLocations vertex : vertices) {
+            locations.addToRear(vertex);
+        }
+
+        return locations;
+    }
+
+    private JSONObject serializeLocation(MapLocations location) {
+        JSONObject locationJson = new JSONObject();
+        locationJson.put("name", location.getName());
+        locationJson.put("type", location.getType().toString());
+        locationJson.put("isStart", location.isStart());
+
+        if (location.getEvent() == null) {
+            locationJson.put("event", null);
+        } else {
+            locationJson.put("event", serializeLocationEvent(location));
+        }
+
+        return locationJson;
+    }
+
+    private JSONObject serializeLocationEvent(MapLocations location) {
+        JSONObject eventJson = new JSONObject();
+        eventJson.put("description", location.getEvent().getDescription());
+        eventJson.put("correctChoice", ((EnigmaEvent) location.getEvent()).getCorrectChoice());
+        eventJson.put("choices", serializeChoices(location.getEvent().getChoices()));
+        return eventJson;
+    }
+
+    private JSONArray serializeChoices(ArrayUnorderedList<String> choices) {
+        JSONArray choicesJson = new JSONArray();
+        for (String choice : choices) {
+            choicesJson.add(choice);
+        }
+        return choicesJson;
+    }
+
+    private JSONObject serializeCorridor(Map map) {
+        int i = 1;
+        int j = 1;
+
+        JSONObject corridorJson = new JSONObject();
+        NetworkGraph<MapLocations> graph = map.getGraph();
+        ArrayUnorderedList<MapLocations> vertices = getLocationsList(map);
+
+        for (MapLocations location: vertices) {
+            ArrayUnorderedList<MapLocations> neighbors = graph.getNeighbors(location);
+            for (MapLocations neighbor: neighbors) {
+            }
+        }
+
+        return corridorJson;
     }
 }

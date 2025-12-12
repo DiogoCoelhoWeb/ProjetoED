@@ -84,7 +84,7 @@ public class MapCreationMenu extends AbstractMenu{
 
     private void createRoom() {
         boolean isStart = false;
-        ChoiceEvent event;
+        ChoiceEvent event = null;
         RoomTypeMenu roomTypeMenu = new RoomTypeMenu(this.hasTreasureRoom);
         ChoiceEventMenu choiceEventMenu = new ChoiceEventMenu();
 
@@ -96,7 +96,12 @@ public class MapCreationMenu extends AbstractMenu{
             isStart = true;
             this.hasStartRoom = true;
         }
-        event = choiceEventMenu.createChoiceEvent();
+
+        String wantEvent = readInput("Do you want to add a choice event to this room? (y/n): ");
+
+        if (wantEvent.equalsIgnoreCase("y")) {
+            event = choiceEventMenu.createChoiceEvent();
+        }
 
         if (type == RoomType.TREASURE_ROOM) {
             Treasure treasureRoom = new Treasure(name, event);
