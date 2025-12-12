@@ -1,7 +1,6 @@
 package rooms;
 
 import events.ChoiceEvent;
-import events.Event;
 
 public abstract class  MapLocations {
 
@@ -55,5 +54,5 @@ public abstract class  MapLocations {
      *
      * @return the type of the map location as a string
      */
-    public abstract String getType();
+    public abstract RoomType getType();
 }

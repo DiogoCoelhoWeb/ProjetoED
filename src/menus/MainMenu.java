@@ -6,9 +6,7 @@ import java.io.InputStreamReader;
 
 public class MainMenu extends AbstractMenu {
 
-    public MainMenu() {
-        super("");
-    }
+    public MainMenu() {}
 
     protected void displayMenu() {
         System.out.println("Main Menu");
@@ -19,15 +17,29 @@ public class MainMenu extends AbstractMenu {
     }
 
     public void runMenu() {
-        displayMenu();
-        System.out.println("Please select an option");
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            String input = br.readLine();
-            int option = Integer.parseInt(input);
-            executeOption(option);
-        } catch (IOException | NumberFormatException ignored) {
+        boolean isValid = false;
+        boolean hasExited = false;
 
-        }
+        do {
+            displayMenu();
+            String input = readInput("Please select an option: ");
+            try {
+                int option = Integer.parseInt(input);
+                if (option >= 1 && option <= 4) {
+                    isValid = true;
+                    if (option == 4) {
+                        hasExited = true;
+                        System.out.println("Exiting...");
+                        System.exit(0);
+                    }
+                    executeOption(option);
+                } else {
+                    System.out.println("Invalid option. Please try again.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        } while (!isValid || !hasExited);
     }
 
     protected void executeOption(int option) {
@@ -40,7 +52,7 @@ public class MainMenu extends AbstractMenu {
                     System.out.println("Loading game...");
                     break;
                 case 3:
-                    System.out.println("Creating map...");
+                    createMap();
                     break;
                 case 4:
                     System.out.println("Exiting...");
@@ -50,5 +62,14 @@ public class MainMenu extends AbstractMenu {
                     break;
             }
         } while (option < 1 || option > 4);
+    }
+
+    private void createMap() {
+        printSeparator();
+
+        String mapName = readInput("Enter map name: ");
+
+        MapCreationMenu mapCreationMenu = new MapCreationMenu(mapName);
+        mapCreationMenu.runMenu();
     }
 }

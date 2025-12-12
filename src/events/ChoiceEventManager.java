@@ -4,6 +4,7 @@ import lists.ArrayUnorderedList;
 
 public class ChoiceEventManager {
     private ArrayUnorderedList<ChoiceEvent> events;
+    //private ArrayUnorderedList<? extends ChoiceEvent> events;
 
     public ChoiceEventManager() {
         this.events = new ArrayUnorderedList<>();

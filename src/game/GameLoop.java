@@ -4,6 +4,7 @@ import events.ChoiceEvent;
 import events.Event;
 import lists.ArrayUnorderedList;
 import map.Map;
+import rooms.RoomType;
 import player.Player;
 import player.PlayerManager;
 import rooms.MapLocations;
@@ -363,7 +364,7 @@ public class GameLoop {
      *               it triggers the win condition.
      */
     private void checkWinCondition(Player player, MapLocations target) {
-        if (target.getType().equals("Treasure Room")) {
+        if (target.getType() == RoomType.TREASURE_ROOM) {
             System.out.println("\n************************************************");
             System.out.println("PARABENS " + player.getUsername() + "!");
             System.out.println("Voce encontrou a sala do Tesouro e VENCEU o jogo!");
