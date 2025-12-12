@@ -6,6 +6,7 @@ import player.Player;
 public abstract class ChoiceEvent extends Event{
 
    protected ArrayUnorderedList<String> choices;
+   //private String id;
 
     /**
      * Constructs a ChoiceEvent with the specified description.
@@ -43,20 +44,12 @@ public abstract class ChoiceEvent extends Event{
     }
 
     /**
-     * Executes the specific logic of this event based on the player provided.
+     * Executes the event, applying its effects to the specified player.
+     * This method must be implemented by subclasses to define their specific event logic.
      *
-     * @param player the player participating in the event
-     * @return a string result based on the execution of the event
+     * @param player the player affected by the event
+     * @return a String message describing the outcome of the event
      */
     public abstract String execute(Player player);
-
-    /**
-     * Executes the event with a specific choice for the given player.
-     * Performs actions based on the player state and the provided choice index.
-     *
-     * @param player the player interacting with the event
-     * @param choice the index of the choice selected by the player
-     * @return a string representing the outcome or description of the event
-     */
     public abstract String execute(Player player,int choice);
 }

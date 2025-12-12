@@ -2,8 +2,8 @@ package game;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser; // NEW
+import org.json.simple.parser.ParseException; // NEW
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -14,25 +14,19 @@ import player.Player;
 import player.PlayerManager;
 import stack.LinkedStack;
 import rooms.MapLocations;
-import events.Event;
+import events.Event; // NEW
 
 public class GameLogger {
-    private ArrayUnorderedList<String> logs;
+    private ArrayUnorderedList<String> logs; // Each entry will be a JSON string or simple message
 
-    /**
-     * Constructs a new instance of the GameLogger class.
-     * Initializes an internal data structure to store log entries.
-     */
     public GameLogger() {
         this.logs = new ArrayUnorderedList<>();
     }
 
-    /**
-     * Logs a message by adding it to the internal log storage.
-     *
-     * @param message The message to be logged.
-     */
     public void log(String message) {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        // For simple log messages, just store as a string for now.
+        // In saveReport(), we'll wrap it in a JSONObject for consistency.
         logs.addToRear(message); 
     }
 
@@ -53,28 +47,25 @@ public class GameLogger {
         eventLog.put("event_description", event.getDescription());
         eventLog.put("outcome", outcomeMessage);
         
-        logs.addToRear(eventLog.toJSONString());
+        logs.addToRear(eventLog.toJSONString()); // Store as JSON string
     }
 
-    /**
-     * Saves a detailed game report in JSON format, including player paths and game logs.
-     * The report is saved as a file in the local storage with a timestamped filename.
-     *
-     * @param playerManager The PlayerManager instance containing the list of players
-     *                      and their respective path histories to be included in the report.
-     */
     public void saveReport(PlayerManager playerManager) {
         JSONObject report = new JSONObject();
-
+        
+        // Game Log
         JSONArray logArray = new JSONArray();
         Iterator<String> logIt = logs.iterator();
-        JSONParser parser = new JSONParser();
+        JSONParser parser = new JSONParser(); // New parser instance
         while(logIt.hasNext()){
             String logEntry = logIt.next();
+            // Try to parse as JSON, otherwise wrap in a simple JSONObject
             try {
+                // If it's already a JSON string from logEvent, parse it.
                 JSONObject parsedLog = (JSONObject) parser.parse(logEntry);
                 logArray.add(parsedLog);
-            } catch (Exception e) {
+            } catch (ParseException | ClassCastException e) { // Catch ParseException and ClassCastException
+                // If it's a simple string log, wrap it.
                 JSONObject simpleLog = new JSONObject();
                 simpleLog.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
                 simpleLog.put("type", "MESSAGE");
@@ -83,7 +74,8 @@ public class GameLogger {
             }
         }
         report.put("game_log", logArray);
-        
+
+        // Player Paths (remains the same)
         JSONArray playersArray = new JSONArray();
         Iterator<Player> playerIt = playerManager.getPlayers().iterator();
         while(playerIt.hasNext()){

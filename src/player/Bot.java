@@ -14,19 +14,19 @@ public class Bot extends Player {
     private final double SHORTEST_PATH_PROBABILITY = 0.20;
     private final double ENIGMA_SUCCESS_PROBABILITY = 0.45;
 
-    /**
-     * Constructs a Bot object with a specified username and starting location.
-     * A Bot is a type of player with additional capabilities for automated
-     * decision-making during gameplay.
-     *
-     * @param username the username of the bot
-     * @param startingLocation the initial location where the bot starts
-     */
     public Bot(String username, MapLocations startingLocation) {
         super(username, startingLocation);
         this.previousLocation = null;
     }
 
+
+    public void moveTo(MapLocations newLocation, NetworkGraph<MapLocations> graph) {
+        // Store current as previous before moving
+        if (this.getCurrentLocation() != newLocation) {
+            this.previousLocation = this.getCurrentLocation();
+        }
+        super.moveTo(newLocation, graph);
+    }
 
     /**
      * Decides the next move for the bot based on available connections.
@@ -95,12 +95,7 @@ public class Bot extends Player {
     }
 
     /**
-     * Finds and returns the location of the treasure room in the given network graph.
-     * This method uses a breadth-first search (BFS) strategy starting from the current location
-     * to look for a map location of type "Treasure Room".
-     *
-     * @param graph the network graph representing the game map, containing map locations as vertices
-     * @return the MapLocations object representing the treasure room if found, or null if no treasure room exists in the graph
+     * Helper to find the Treasure Room in the graph.
      */
     private MapLocations findTreasure(NetworkGraph<MapLocations> graph) {
         // Note: This relies on accessing vertices. Since we only have the graph object,
