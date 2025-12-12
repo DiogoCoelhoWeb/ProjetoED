@@ -6,7 +6,7 @@ import stack.LinkedStack;
 
 public class Player {
 
-    private static int idCounter = 0;
+    private static int idCounter = 1;
 
     private int id; // Removed final
     private final String username;

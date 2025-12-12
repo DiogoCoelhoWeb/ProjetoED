@@ -496,7 +496,7 @@
       "id": "quote1",
       "question": "You choose your destiny with a single decision. Do you choose: Rock, Paper, or Scissors?",
       "choices": ["Rock", "Paper", "Scissors"],
-      "response_quote": "Your choice  was perfectly inadequate. Chuck Norris chooses 'Nokia 3310'."
+      "response_quote": "Your choice was perfectly inadequate. Chuck Norris chooses 'Nokia 3310'."
     },
     {
       "id": "quote2",
@@ -532,7 +532,7 @@
       "id": "quote8",
       "question": "The paradox of choice: If you had to choose a theme song for the Nokia 3310's immortality, which one would it be?",
       "choices": ["'Another Brick in the Wall' (Pink Floyd)", "'Highway to Hell' (AC/DC)", "'Forever Young' (Alphaville)"],
-      "response_quote": "Incorrect. The correct answer is 'Snake'. You are now stuck playing the game until the battery dies (never)."
+      "response_quote": "Incorrect. The correct answer is 'Snake'. You are now stuck playing the game until the battery dies (forever)."
     },
     {
       "id": "quote9",

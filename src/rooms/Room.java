@@ -48,7 +48,7 @@ public class Room extends MapLocations {
      * @return the string "Room", indicating the type of this map location
      */
     @Override
-    public String getType() {
-        return "Room";
+    public RoomType getType() {
+        return isStart ? RoomType.ENTRANCE_HALL : RoomType.ROOM;
     }
 }

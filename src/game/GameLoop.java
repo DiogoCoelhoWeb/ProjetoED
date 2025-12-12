@@ -4,6 +4,7 @@ import events.ChoiceEvent;
 import events.Event;
 import lists.ArrayUnorderedList;
 import map.Map;
+import rooms.RoomType;
 import player.Bot;
 import player.Player;
 import player.PlayerManager;
@@ -76,7 +77,7 @@ public class GameLoop {
                 }
             }
         }
-        
+
         System.out.println("Game Over.");
         logger.log("Game Over.");
         logger.saveReport(playerManager);
@@ -452,7 +453,7 @@ public class GameLoop {
 
         // Executa evento da sala se não for interativo (já processado)
         ChoiceEvent targetEvent = target.getEvent();
-        
+
         if (targetEvent instanceof events.SwapEvent) {
             handleSwapEvent(player);
         } else if (targetEvent != null && targetEvent.getChoices().isEmpty()) {
@@ -469,7 +470,7 @@ public class GameLoop {
      */
     private void handleSwapEvent(Player player) {
         System.out.println("--- SWAP EVENT TRIGGERED ---");
-        
+
         lists.ArrayUnorderedList<Player> players = playerManager.getPlayers();
         if (players.size() <= 1) {
             System.out.println("No other players to swap with. The rift closes.");
@@ -493,7 +494,7 @@ public class GameLoop {
 
         player.setCurrentLocation(targetLoc);
         targetPlayer.setCurrentLocation(playerLoc);
-        
+
         logger.logEvent(player, new events.SwapEvent(), player.getUsername() + " swapped positions with " + targetPlayer.getUsername());
     }
 
@@ -508,7 +509,7 @@ public class GameLoop {
      *               it triggers the win condition.
      */
     private void checkWinCondition(Player player, MapLocations target) {
-        if (target.getType().equals("Treasure Room")) {
+        if (target.getType() == RoomType.TREASURE_ROOM) {
             System.out.println("\n************************************************");
             System.out.println("PARABENS " + player.getUsername() + "!");
             System.out.println("Voce encontrou a sala do Tesouro e VENCEU o jogo!");

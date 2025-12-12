@@ -1,7 +1,7 @@
 package rooms;
 
 import events.ChoiceEvent;
-
+import events.Event;
 
 public abstract class  MapLocations {
 
@@ -36,15 +36,6 @@ public abstract class  MapLocations {
     }
 
     /**
-     * Retrieves the unique identifier for this map location.
-     *
-     * @return the integer identifier of the map location
-     */
-    public int getId() {
-        return this.id;
-    }
-
-    /**
      * Constructs a MapLocations instance with the specified name.
      *
      * @param name the name of the map location
@@ -64,5 +55,5 @@ public abstract class  MapLocations {
      *
      * @return the type of the map location as a string
      */
-    public abstract String getType();
+    public abstract RoomType getType();
 }

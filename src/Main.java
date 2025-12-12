@@ -2,7 +2,9 @@ import menus.MainMenu;
 
 public class Main {
     public static void main(String[] args) {
-        MainMenu mainMenu = new MainMenu();
+
+        System.out.println("Welcome to the Game!");
+        menus.MainMenu mainMenu = new menus.MainMenu();
         mainMenu.runMenu();
     }
 }

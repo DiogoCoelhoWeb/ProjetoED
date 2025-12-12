@@ -33,7 +33,7 @@ public class Treasure extends MapLocations{
      * @return the string "Treasure Room", indicating the type of this map location
      */
     @Override
-    public String getType() {
-        return "Treasure Room";
+    public RoomType getType() {
+        return RoomType.TREASURE_ROOM;
     }
 }
