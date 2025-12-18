@@ -53,4 +53,12 @@ public abstract class  MapLocations {
      * @return the type of the map location as a string
      */
     public abstract RoomType getType();
+
+    public String toString(){
+        String s= "";
+        s += "Location " + this.name + "\n";
+        s += "  Event: " + this.event == null ? "No Event" : this.event.toString();
+
+        return s;
+    }
 }

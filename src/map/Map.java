@@ -5,6 +5,8 @@ import graph.NetworkGraph;
 import lists.ArrayUnorderedList;
 import rooms.MapLocations;
 
+import java.util.Iterator;
+
 
 public class Map {
 
@@ -94,4 +96,21 @@ public class Map {
         return this.startLocation;
     }
 
+    public ArrayUnorderedList<MapLocations> getNoEnigmaLocations(){
+        ArrayUnorderedList<MapLocations> noEnigmaLocations = new ArrayUnorderedList<>();
+
+        for(Object location: this.graph.getVertices()){
+            if(location instanceof MapLocations){
+                location = (MapLocations) location;
+            }else {
+                throw new IllegalArgumentException("");
+            }
+
+            if(location.getEvent() == null){
+                noEnigmaLocations.addToRear(location);
+            }
+        }
+
+        return noEnigmaLocations;
+    }
 }
